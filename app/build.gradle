@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "muxi.muxicoffepoint"
+        applicationId "com.travelguide"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -40,6 +40,8 @@ dependencies {
 
     //dependency injection
     implementation "com.google.dagger:dagger:$rootProject.ext.dagger2Version"
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"
     testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"
     compileOnly "javax.annotation:jsr250-api:$rootProject.ext.javaxAnnotationVersion"
@@ -56,12 +58,11 @@ dependencies {
     implementation "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
 
-
     // google sign in
-        implementation "com.google.android.gms:play-services-auth:$rootProject.ext.authVersion"
+    implementation "com.google.android.gms:play-services-auth:$rootProject.ext.authVersion"
 
     // google calendar
-    implementation ("com.google.api-client:google-api-client:$rootProject.ext.calendarVersion"){
+    implementation("com.google.api-client:google-api-client:$rootProject.ext.calendarVersion") {
         exclude module: 'guava-jdk5'
     }
 
@@ -70,7 +71,6 @@ dependencies {
 
     //google maps
     implementation "com.google.android.gms:play-services-maps:$rootProject.ext.mapsVersion"
-
 
     //test
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
