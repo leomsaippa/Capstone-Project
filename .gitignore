@@ -72,6 +72,9 @@ vcs.xml
 
 # lint
 lint/intermediates/
+
+API
+app/src/main/res/values/google_maps_api.xml
 lint/generated/
 lint/outputs/
 lint/tmp/
