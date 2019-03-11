@@ -33,4 +33,8 @@ public class AppDataManager implements DataManager{
     public void openMainActivity() {
 
     }
+
+    @Override
+    public void getPlaces() {
+    }
 }

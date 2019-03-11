@@ -8,4 +8,6 @@ import com.travelguide.data.prefs.PreferencesHelper;
 public interface DataManager extends DbHelper, StringHelper, ApiHelper, PreferencesHelper {
 
     void openMainActivity();
+
+    void getPlaces();
 }

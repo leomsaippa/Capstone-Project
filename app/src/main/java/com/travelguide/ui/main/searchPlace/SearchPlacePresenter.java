@@ -15,4 +15,9 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
     public SearchPlacePresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         super(dataManager, schedulerProvider, compositeDisposable);
     }
+
+    @Override
+    public void onBtnSearchClick() {
+        getDataManager().getPlaces();
+    }
 }
