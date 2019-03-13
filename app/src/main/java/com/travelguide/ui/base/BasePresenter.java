@@ -40,6 +40,8 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
 
     }
 
+
+
     protected V getMvpView() {
         return mMvpView;
     }

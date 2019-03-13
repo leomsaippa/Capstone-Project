@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity implements LoginMvpView {
 
@@ -34,6 +35,11 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     @BindView(R.id.tv_error)
     TextView mError;
+
+    @BindView(R.id.sign_in_button)
+    SignInButton mSignInButton;
+
+
 
     GoogleSignInClient mGoogleSignInClient;
     @Override
@@ -54,20 +60,13 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
+        mSignInButton.setSize(SignInButton.SIZE_STANDARD);
 
 
     }
 
-    private void signIn() {
+    @OnClick(R.id.sign_in_button)
+    public void onSignInBtnClick(View view){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -82,14 +81,14 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        }else{
+            mError.setText(R.string.error_login);
         }
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
             updateUI(account);
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -107,9 +106,7 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
 
     private void updateUI(GoogleSignInAccount account) {
         Toast.makeText(this, "User is signed in", Toast.LENGTH_SHORT).show();
-//        mPresenter.openMainActivity();
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
-
     }
 }

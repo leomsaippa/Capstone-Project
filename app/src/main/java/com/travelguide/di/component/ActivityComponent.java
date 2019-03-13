@@ -5,13 +5,13 @@ import com.travelguide.di.PerActivity;
 import com.travelguide.di.module.ActivityModule;
 import com.travelguide.ui.login.LoginActivity;
 import com.travelguide.ui.main.MainActivity;
-import com.travelguide.ui.main.attractionDetail.AttractionDetailFragment;
-import com.travelguide.ui.main.attractionList.AttractionListFragment;
-import com.travelguide.ui.main.dayRoute.DayRouteFragment;
-import com.travelguide.ui.main.itineraryDay.ItineraryDayFragment;
-import com.travelguide.ui.main.itineraryDetail.ItineraryDetailFragment;
-import com.travelguide.ui.main.itineraryList.ItineraryListFragment;
-import com.travelguide.ui.main.searchPlace.SearchPlaceFragment;
+import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
+import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
+import com.travelguide.ui.fragments.dayRoute.DayRouteFragment;
+import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
+import com.travelguide.ui.fragments.itineraryDetail.ItineraryDetailFragment;
+import com.travelguide.ui.fragments.itineraryList.ItineraryListFragment;
+import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 
 @PerActivity
 @Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
