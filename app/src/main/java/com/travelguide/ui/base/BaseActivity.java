@@ -1,8 +1,10 @@
 package com.travelguide.ui.base;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.DatePicker;
 
 import com.travelguide.di.component.ActivityComponent;
 import com.travelguide.di.component.DaggerActivityComponent;
@@ -26,6 +28,5 @@ public class BaseActivity extends AppCompatActivity implements MvpView {
     public ActivityComponent getActivityComponent() {
         return mActivityComponent;
     }
-
 
 }

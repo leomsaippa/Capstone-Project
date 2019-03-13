@@ -1,14 +1,18 @@
 package com.travelguide.ui.main;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 
 import javax.inject.Inject;
 
@@ -19,8 +23,12 @@ import com.travelguide.R;
 import com.travelguide.ui.base.BaseActivity;
 import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 
-public class MainActivity extends BaseActivity implements MainMvpView, NavigationView.OnNavigationItemSelectedListener {
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+public class MainActivity extends BaseActivity implements MainMvpView, NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -123,8 +131,17 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
     private void showSearchPlaceFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_main, SearchPlaceFragment.newInstance(), SearchPlaceFragment.TAG)
+                .replace(R.id.content_main, SearchPlaceFragment.getInstance(), SearchPlaceFragment.TAG)
                 .commit();
     }
 
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+        Log.d(TAG,"onDateSet" + calendar);
+        SearchPlaceFragment fragment =  (SearchPlaceFragment) getSupportFragmentManager().findFragmentByTag(SearchPlaceFragment.TAG);
+        if(fragment != null)
+            fragment.onCalendarResult(calendar);
+    }
 }
