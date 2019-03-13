@@ -26,7 +26,7 @@ import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class MainActivity extends BaseActivity implements MainMvpView, NavigationView.OnNavigationItemSelectedListener, DatePickerDialog.OnDateSetListener {
+public class MainActivity extends BaseActivity implements MainMvpView, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
 
@@ -135,13 +135,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
                 .commit();
     }
 
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-        Log.d(TAG,"onDateSet" + calendar);
-        SearchPlaceFragment fragment =  (SearchPlaceFragment) getSupportFragmentManager().findFragmentByTag(SearchPlaceFragment.TAG);
-        if(fragment != null)
-            fragment.onCalendarResult(calendar);
-    }
+//
+//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+//        Log.d(TAG,"onDateSet" + calendar);
+//        SearchPlaceFragment fragment =  (SearchPlaceFragment) getSupportFragmentManager().findFragmentByTag(SearchPlaceFragment.TAG);
+//        if(fragment != null)
+//            fragment.onCalendarResult(calendar);
+//    }
 }

@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 import butterknife.Unbinder;
 
-public class BaseDialog extends DialogFragment implements DialogMvpView, DatePickerDialog.OnDateSetListener {
+public class BaseDialog extends DialogFragment implements DialogMvpView {
 
     private  BaseActivity mActivity;
     private Unbinder mUnbinder;
@@ -25,19 +25,4 @@ public class BaseDialog extends DialogFragment implements DialogMvpView, DatePic
 
 
 
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-    }
-
-    @Override
-    public Dialog createCalendarDialog() {
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-
-        return new DatePickerDialog(mActivity,(DatePickerDialog.OnDateSetListener) mActivity, year, month, day);
-    }
 }

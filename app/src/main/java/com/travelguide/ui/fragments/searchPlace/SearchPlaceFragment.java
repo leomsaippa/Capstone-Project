@@ -4,10 +4,12 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -25,7 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpView {
+public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpView, DatePickerFragment.OnSelectedDate {
 
     public static final String TAG = SearchPlaceFragment.class.getSimpleName();
 
@@ -89,11 +92,17 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     public void showCalendar(){
         DatePickerFragment fragment = new DatePickerFragment();
         if(getFragmentManager()!=null)
-            fragment.show(getFragmentManager(),DatePickerFragment.TAG);
+            fragment.show(getChildFragmentManager(),DatePickerFragment.TAG);
     }
 
-    public void onCalendarResult(Calendar calendar) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
+    @Override
+    public void onSelectedDate(int year, int month, int dayOfMonth) {
+        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
         //TODO adicionar logica para verificar se a data de volta é menor que a de ida
         final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
         if(beginCall){
@@ -103,11 +112,5 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
             mTextEndTravel.setText(dateFormat.format(calendar.getTime()));
             beginCall = true;
         }
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }
