@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.travelguide.R;
 import com.travelguide.ui.base.BaseFragment;
+import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 
 import java.text.DateFormat;
@@ -75,6 +76,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @OnClick(R.id.btn_search)
     public void onClickBtnSearch(View view){
         mPresenter.onBtnSearchClick();
+        openAttractionListFragment();
     }
 
     @OnClick(R.id.tv_endTravel)
@@ -112,5 +114,13 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
             mTextEndTravel.setText(dateFormat.format(calendar.getTime()));
             beginCall = true;
         }
+    }
+
+    @Override
+    public void openAttractionListFragment() {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_main, AttractionListFragment.getInstance(), AttractionListFragment.TAG)
+                .commit();
     }
 }

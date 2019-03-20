@@ -8,6 +8,7 @@ import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
 import com.travelguide.di.ActivityContext;
 import com.travelguide.di.PerActivity;
+import com.travelguide.ui.fragments.attractionList.AttractionListMvpPresenter;
 import com.travelguide.ui.login.LoginMvpPresenter;
 import com.travelguide.ui.login.LoginMvpView;
 import com.travelguide.ui.login.LoginPresenter;
@@ -91,7 +92,7 @@ public class ActivityModule {
 
     @Provides
     @PerActivity
-    AttractionListPresenter<AttractionListMvpView> providesAttractionListPresenter(
+    AttractionListMvpPresenter<AttractionListMvpView> providesAttractionListPresenter(
             AttractionListPresenter<AttractionListMvpView> presenter){
         return presenter;
     }
