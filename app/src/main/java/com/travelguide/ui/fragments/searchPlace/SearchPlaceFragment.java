@@ -1,6 +1,7 @@
 package com.travelguide.ui.fragments.searchPlace;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.travelguide.R;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
@@ -23,7 +30,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +38,7 @@ import butterknife.OnClick;
 public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpView, DatePickerFragment.OnSelectedDate {
 
     public static final String TAG = SearchPlaceFragment.class.getSimpleName();
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1 ;
 
     @BindView(R.id.btn_search)
     Button mBtnSearch;
@@ -41,6 +48,9 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
     @BindView(R.id.tv_endTravel)
     TextView mTextEndTravel;
+
+    @BindView(R.id.placeName)
+            TextView txtVw;
 
     boolean beginCall = false;
 
@@ -53,6 +63,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
         searchPlaceFragment.setArguments(args);
         return searchPlaceFragment;
     }
+
 
 
 
@@ -69,14 +80,18 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
         mPresenter.onAttach(this);
 
+        mPresenter.setApiEndPoint();
+
         return view;
 
     }
 
     @OnClick(R.id.btn_search)
     public void onClickBtnSearch(View view){
-        mPresenter.onBtnSearchClick();
-        openAttractionListFragment();
+
+
+        mPresenter.onBtnSearchClick("New York");
+   
     }
 
     @OnClick(R.id.tv_endTravel)
@@ -114,6 +129,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
             mTextEndTravel.setText(dateFormat.format(calendar.getTime()));
             beginCall = true;
         }
+
     }
 
     @Override

@@ -14,10 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.travelguide.R;
-import com.travelguide.data.network.model.AttractionResult;
+import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
-import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 
 import javax.inject.Inject;
@@ -112,7 +111,7 @@ public class AttractionListFragment extends BaseFragment implements AttractionLi
     }
 
     @Override
-    public void onClick(AttractionResult attractionResult) {
+    public void onClick(SearchPlaceResponse searchPlaceResponse) {
         openAttractionDetailFragment();
     }
 

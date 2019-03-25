@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.travelguide.R;
-import com.travelguide.data.network.model.AttractionResult;
+import com.travelguide.data.network.model.SearchPlaceResponse;
 
 import java.util.List;
 
@@ -19,29 +19,29 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
 
     private final AttractionsAdapterOnClickHandler mClickHandler;
 
-    private List<AttractionResult> attractionResultList;
+    private List<SearchPlaceResponse> searchPlaceResponseList;
 
 
-    void setAttractionResultList(List<AttractionResult> attractionResultList) {
-        if(attractionResultList != null){
-            this.attractionResultList.addAll(attractionResultList);
+    void setSearchPlaceResponseList(List<SearchPlaceResponse> searchPlaceResponseList) {
+        if(searchPlaceResponseList != null){
+            this.searchPlaceResponseList.addAll(searchPlaceResponseList);
 
         }else{
-            this.attractionResultList = attractionResultList;
+            this.searchPlaceResponseList = searchPlaceResponseList;
         }
         notifyDataSetChanged();
     }
 
     void clear(){
-        if(attractionResultList !=null){
-            attractionResultList.clear();
+        if(searchPlaceResponseList !=null){
+            searchPlaceResponseList.clear();
         }else{
             Log.d(TAG,"Can't clear. AttractionResultList list is null!");
         }
     }
 
     public interface AttractionsAdapterOnClickHandler {
-        void onClick (AttractionResult attractionResult);
+        void onClick (SearchPlaceResponse searchPlaceResponse);
     }
 
     public AttractionsAdapter(AttractionsAdapterOnClickHandler mClickHandler) {
@@ -64,10 +64,10 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
 
     @Override
     public int getItemCount() {
-        if(attractionResultList ==null){
+        if(searchPlaceResponseList ==null){
             return 0;
         }
-        return attractionResultList.size();
+        return searchPlaceResponseList.size();
     }
 
     public class AttractionsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -83,7 +83,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
         @Override
         public void onClick(View v) {
             Log.d(TAG,"onClick " + getAdapterPosition());
-            mClickHandler.onClick(attractionResultList.get((getAdapterPosition())));
+            mClickHandler.onClick(searchPlaceResponseList.get((getAdapterPosition())));
         }
 
         void bind(String poster_path) {

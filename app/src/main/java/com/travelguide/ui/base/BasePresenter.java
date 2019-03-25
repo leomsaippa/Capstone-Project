@@ -40,7 +40,9 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
 
     }
 
-
+    public boolean isViewAttached() {
+        return mMvpView != null;
+    }
 
     protected V getMvpView() {
         return mMvpView;

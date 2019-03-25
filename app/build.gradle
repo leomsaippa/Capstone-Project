@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
+    compileOptions {
+        targetCompatibility = "8"
+        sourceCompatibility = "8"
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.travelguide"
@@ -69,8 +73,16 @@ dependencies {
     //google places
     implementation "com.google.android.libraries.places:places:$rootProject.ext.placeVersion"
 
+    //autocomplete
+    implementation "com.google.android.gms:play-services-places:$rootProject.ext.playServicesPlaceVersion"
+
     //google maps
     implementation "com.google.android.gms:play-services-maps:$rootProject.ext.mapsVersion"
+
+    //Json parser
+    implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
+
+    implementation 'com.squareup.okhttp3:okhttp:3.14.0'
 
     //test
     testImplementation "junit:junit:$rootProject.ext.junitVersion"

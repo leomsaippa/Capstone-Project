@@ -1,15 +1,14 @@
 package com.travelguide.data;
 
-import android.content.Intent;
-
 import javax.inject.Inject;
 
+import com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult;
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
 import com.travelguide.data.prefs.PreferencesHelper;
-import com.travelguide.ui.login.LoginActivity;
-import com.travelguide.ui.main.MainActivity;
+
+import io.reactivex.Observable;
 
 public class AppDataManager implements DataManager{
 
@@ -35,6 +34,24 @@ public class AppDataManager implements DataManager{
     }
 
     @Override
-    public void getPlaces() {
+    public String generateQuery(String place) {
+        return mStringHelper.generateQuery(place);
     }
+
+    @Override
+    public void apiSetEndPoint(String endpoint) {
+        mApiHelper.apiSetEndPoint(endpoint);
+    }
+
+    @Override
+    public Observable<PlaceResult> apiGetPlaces(String query) {
+        return mApiHelper.apiGetPlaces(query);
+    }
+
+    @Override
+    public String getMessageLoading() {
+        return mStringHelper.getMessageLoading();
+    }
+
+
 }

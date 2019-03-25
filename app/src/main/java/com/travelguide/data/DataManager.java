@@ -9,5 +9,6 @@ public interface DataManager extends DbHelper, StringHelper, ApiHelper, Preferen
 
     void openMainActivity();
 
-    void getPlaces();
+    String generateQuery(String place);
+
 }
