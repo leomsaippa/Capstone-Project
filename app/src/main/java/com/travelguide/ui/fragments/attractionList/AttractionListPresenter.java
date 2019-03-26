@@ -1,6 +1,7 @@
 package com.travelguide.ui.fragments.attractionList;
 
 import com.travelguide.data.DataManager;
+import com.travelguide.data.network.model.PlaceResult;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.rx.SchedulerProvider;
 
@@ -18,6 +19,6 @@ public class AttractionListPresenter<V extends AttractionListMvpView> extends Ba
 
     @Override
     public void onBtnLoadAttractionsClick() {
-        getMvpView().openAttractionDetailFragment();
+        //todo adicionar logica para pegar mais lugares
     }
 }
