@@ -1,11 +1,14 @@
 package com.travelguide.data.network;
 
+import com.androidnetworking.interceptors.HttpLoggingInterceptor;
 import com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
+import com.travelguide.data.network.model.SearchPlaceResponse;
 
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import okhttp3.OkHttpClient;
 
 
 @Singleton
@@ -19,17 +22,14 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Observable<PlaceResult> apiGetPlaces(String query) {
-/*
+    public Observable<SearchPlaceResponse> apiGetPlaces(String query) {
 
-        OkHttpClient httpClient = new OkHttpClient();
-        httpClient.interceptors().add(new HttpLoggingInterceptor());
-*/
-
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         return Rx2AndroidNetworking.get(baseUrl + query)
-//                .setOkHttpClient(httpClient)
+                .setOkHttpClient(httpClient)
                 .build()
-                .getObjectObservable(PlaceResult.class);
+                .getObjectObservable(SearchPlaceResponse.class);
     }
 }

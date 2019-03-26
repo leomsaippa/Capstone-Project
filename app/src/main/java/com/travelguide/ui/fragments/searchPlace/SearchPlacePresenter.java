@@ -2,8 +2,8 @@ package com.travelguide.ui.fragments.searchPlace;
 
 import android.util.Log;
 
-import com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult;
 import com.travelguide.data.DataManager;
+import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.AppConstants;
 import com.travelguide.utils.rx.SchedulerProvider;
@@ -34,15 +34,15 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                     query)
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
-                    .subscribe(new Consumer<PlaceResult>() {
+                    .subscribe(new Consumer<SearchPlaceResponse>() {
                         @Override
-                        public void accept(PlaceResult placeResult) throws Exception {
+                        public void accept(SearchPlaceResponse placeResult) throws Exception {
                         /*    if (!isViewAttached()) {
                                 return;
                             }*/
 
                             //getMvpView().hideLoading();
-                            Log.d(TAG, "Place result " + placeResult.formattedAddress);
+                            Log.d(TAG, "Place result " + placeResult.getPlaceResult().get(0).formattedAddress);
                         }
                     }, new Consumer<Throwable>() {
                         @Override

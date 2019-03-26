@@ -91,7 +91,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
 
         mPresenter.onBtnSearchClick("New York");
-   
+
     }
 
     @OnClick(R.id.tv_endTravel)

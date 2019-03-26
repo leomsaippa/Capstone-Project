@@ -6,6 +6,7 @@ import com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResu
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
+import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.data.prefs.PreferencesHelper;
 
 import io.reactivex.Observable;
@@ -44,7 +45,7 @@ public class AppDataManager implements DataManager{
     }
 
     @Override
-    public Observable<PlaceResult> apiGetPlaces(String query) {
+    public Observable<SearchPlaceResponse> apiGetPlaces(String query) {
         return mApiHelper.apiGetPlaces(query);
     }
 
