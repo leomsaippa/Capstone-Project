@@ -1,26 +1,17 @@
 package com.travelguide.ui.fragments.searchPlace;
 
-import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.travelguide.R;
+import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
@@ -50,7 +41,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     TextView mTextEndTravel;
 
     @BindView(R.id.placeName)
-            TextView txtVw;
+    EditText mPlaceName;
 
     boolean beginCall = false;
 
@@ -88,9 +79,8 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
     @OnClick(R.id.btn_search)
     public void onClickBtnSearch(View view){
-
-
-        mPresenter.onBtnSearchClick("New York");
+        mPlaceName.requestFocus();
+        mPresenter.onBtnSearchClick(mPlaceName.getText().toString());
 
     }
 
@@ -133,10 +123,15 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     }
 
     @Override
-    public void openAttractionListFragment() {
+    public void onErrorEmptyPlace() {
+        mPlaceName.setError(getString(R.string.error_empty_place));
+    }
+
+    @Override
+    public void openAttractionListFragment(SearchPlaceResponse placeResponse) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_main, AttractionListFragment.getInstance(), AttractionListFragment.TAG)
+                .replace(R.id.content_main, AttractionListFragment.getInstance(placeResponse), AttractionListFragment.TAG)
                 .commit();
     }
 }

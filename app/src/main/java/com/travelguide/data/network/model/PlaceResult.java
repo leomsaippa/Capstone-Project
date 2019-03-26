@@ -1,12 +1,15 @@
 package com.travelguide.data.network.model;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PlaceResult {
+public class PlaceResult implements Parcelable {
     @SerializedName("formatted_address")
     @Expose
     public String formattedAddress;
@@ -48,6 +51,38 @@ public class PlaceResult {
     @Expose
     public Integer userRatingsTotal;
 
+
+    protected PlaceResult(Parcel in) {
+        formattedAddress = in.readString();
+        icon = in.readString();
+        internationalPhoneNumber = in.readString();
+        name = in.readString();
+        placeId = in.readString();
+        if (in.readByte() == 0) {
+            rating = null;
+        } else {
+            rating = in.readDouble();
+        }
+        reference = in.readString();
+        types = in.createStringArrayList();
+        if (in.readByte() == 0) {
+            userRatingsTotal = null;
+        } else {
+            userRatingsTotal = in.readInt();
+        }
+    }
+
+    public static final Creator<PlaceResult> CREATOR = new Creator<PlaceResult>() {
+        @Override
+        public PlaceResult createFromParcel(Parcel in) {
+            return new PlaceResult(in);
+        }
+
+        @Override
+        public PlaceResult[] newArray(int size) {
+            return new PlaceResult[size];
+        }
+    };
 
     public String getFormattedAddress() {
         return formattedAddress;
@@ -170,5 +205,33 @@ public class PlaceResult {
                 ", types=" + types +
                 ", userRatingsTotal=" + userRatingsTotal +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(formattedAddress);
+        dest.writeString(icon);
+        dest.writeString(internationalPhoneNumber);
+        dest.writeString(name);
+        dest.writeString(placeId);
+        if (rating == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(rating);
+        }
+        dest.writeString(reference);
+        dest.writeStringList(types);
+        if (userRatingsTotal == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(userRatingsTotal);
+        }
     }
 }

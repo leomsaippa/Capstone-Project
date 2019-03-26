@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.travelguide.R;
-import com.travelguide.data.network.model.SearchPlaceResponse;
+import com.travelguide.data.network.model.PlaceResult;
 
 import java.util.List;
 
@@ -19,15 +21,15 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
 
     private final AttractionsAdapterOnClickHandler mClickHandler;
 
-    private List<SearchPlaceResponse> searchPlaceResponseList;
+    private List<PlaceResult> searchPlaceResponseList;
 
 
-    void setSearchPlaceResponseList(List<SearchPlaceResponse> searchPlaceResponseList) {
+    void setSearchPlaceResponseList(List<PlaceResult> placeResultList) {
         if(searchPlaceResponseList != null){
-            this.searchPlaceResponseList.addAll(searchPlaceResponseList);
-
+            this.searchPlaceResponseList.addAll(placeResultList);
         }else{
-            this.searchPlaceResponseList = searchPlaceResponseList;
+            Log.e(TAG,"Search place response is empty!");
+            this.searchPlaceResponseList = placeResultList;
         }
         notifyDataSetChanged();
     }
@@ -41,7 +43,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     }
 
     public interface AttractionsAdapterOnClickHandler {
-        void onClick (SearchPlaceResponse searchPlaceResponse);
+        void onClick (PlaceResult searchPlaceResponse);
     }
 
     public AttractionsAdapter(AttractionsAdapterOnClickHandler mClickHandler) {
@@ -58,7 +60,11 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AttractionsAdapterViewHolder attractionsAdapterViewHolder, int i) {
+    public void onBindViewHolder(@NonNull AttractionsAdapterViewHolder holder, int position) {
+        PlaceResult placeResult = searchPlaceResponseList.get(position);
+        holder.bind(searchPlaceResponseList.get(position).name,
+                searchPlaceResponseList.get(position).icon,
+                searchPlaceResponseList.get(position).rating);
 
     }
 
@@ -72,11 +78,15 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
 
     public class AttractionsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        final TextView mTvName;
         final ImageView mIvAttraction;
+        final TextView mTvRating;
 
         public AttractionsAdapterViewHolder(View itemView) {
             super(itemView);
+            mTvName = itemView.findViewById(R.id.tv_name);
             mIvAttraction = itemView.findViewById(R.id.iv_attraction);
+            mTvRating = itemView.findViewById(R.id.tv_rating);
             itemView.setOnClickListener(this);
         }
 
@@ -86,8 +96,10 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
             mClickHandler.onClick(searchPlaceResponseList.get((getAdapterPosition())));
         }
 
-        void bind(String poster_path) {
-
+        void bind(String formattedAddress, String poster_path, Double rating) {
+            mTvName.setText(formattedAddress);
+            mTvRating.setText(String.valueOf(rating));
+            Picasso.get().load(poster_path).into(mIvAttraction);
         }
     }
 }

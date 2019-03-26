@@ -3,7 +3,6 @@ package com.travelguide.ui.fragments.searchPlace;
 import android.util.Log;
 
 import com.travelguide.data.DataManager;
-import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.AppConstants;
 import com.travelguide.utils.rx.SchedulerProvider;
@@ -11,7 +10,6 @@ import com.travelguide.utils.rx.SchedulerProvider;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePresenter<V>
         implements SearchPlaceMvpPresenter<V>  {
@@ -25,41 +23,38 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
     @Override
     public void onBtnSearchClick(final String place) {
 
-        String query = getDataManager().generateQuery(place);
+        if(place == null || place.isEmpty()){
+            getMvpView().onErrorEmptyPlace();
+        }else{
 
-        if(query != null){
-      //      getMvpView().showLoading(null,getDataManager().getMessageLoading());
+            String query = getDataManager().generateQuery(place);
 
-            getCompositeDisposable().add(getDataManager().apiGetPlaces(
-                    query)
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .subscribe(new Consumer<SearchPlaceResponse>() {
-                        @Override
-                        public void accept(SearchPlaceResponse placeResult) throws Exception {
-                        /*    if (!isViewAttached()) {
-                                return;
-                            }*/
+            if(query != null){
+                getMvpView().showLoading(null,getDataManager().getMessageLoading());
 
-                            //getMvpView().hideLoading();
-                            Log.d(TAG, "Place result " + placeResult.getPlaceResult().get(0).formattedAddress);
-                        }
-                    }, new Consumer<Throwable>() {
-                        @Override
-                        public void accept(Throwable throwable) throws Exception {
-                          /*  if (!isViewAttached()) {
+                getCompositeDisposable().add(getDataManager().apiGetPlaces(
+                        query)
+                        .subscribeOn(getSchedulerProvider().io())
+                        .observeOn(getSchedulerProvider().ui())
+                        .subscribe(placeResponse -> {
+                            if (!isViewAttached()) {
                                 return;
                             }
-                          */
-                          Log.d(TAG,"Error " + throwable.getMessage());
-                            //getMvpView().hideLoading();
-                        }
-                    })
-            );
-        }else{
-            Log.e(TAG,"Place request null");
+                            Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(0).formattedAddress);
+                            getMvpView().hideLoading();
+                            getMvpView().openAttractionListFragment(placeResponse);
+                        }, throwable -> {
+                            if (!isViewAttached()) {
+                                return;
+                            }
+                            Log.d(TAG,"Error " + throwable.getMessage());
+                            getMvpView().hideLoading();
+                        })
+                );
+            }else{
+                Log.e(TAG,"Place request null");
+            }
         }
-
     }
 
     @Override
