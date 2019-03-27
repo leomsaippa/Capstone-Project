@@ -12,4 +12,7 @@
     <string name="beginningTravel">Data de inicio da viagem</string>
     <string name="searchPlace">Pesquise pelo local de interesse</string>
     <string name="error_login">Falha ao fazer login</string>
+    <string name="internet_error">Cannot connect to Internet. Please check your connection!</string>
+    <string name="try_again">Try again</string>
+    <string name="poster_description">Poster attraction image.</string>
 </resources>

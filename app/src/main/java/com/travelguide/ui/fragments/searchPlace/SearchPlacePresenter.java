@@ -19,5 +19,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
     @Override
     public void onBtnSearchClick() {
         getDataManager().getPlaces();
+        //todo verificar porque está null
+//        getMvpView().openAttractionListFragment();
     }
 }

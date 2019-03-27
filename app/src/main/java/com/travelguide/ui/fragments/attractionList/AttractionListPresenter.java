@@ -15,4 +15,9 @@ public class AttractionListPresenter<V extends AttractionListMvpView> extends Ba
     public AttractionListPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
         super(dataManager, schedulerProvider, compositeDisposable);
     }
+
+    @Override
+    public void onBtnLoadAttractionsClick() {
+        getMvpView().openAttractionDetailFragment();
+    }
 }
