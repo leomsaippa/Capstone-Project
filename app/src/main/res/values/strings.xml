@@ -11,4 +11,5 @@
     <string name="endTravel">Data de fim da viagem</string>
     <string name="beginningTravel">Data de inicio da viagem</string>
     <string name="searchPlace">Pesquise pelo local de interesse</string>
+    <string name="error_login">Falha ao fazer login</string>
 </resources>
