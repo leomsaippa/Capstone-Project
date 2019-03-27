@@ -8,7 +8,6 @@ public class AppDbHelper implements DbHelper {
 
     @Inject
     public AppDbHelper(){
-
     }
 
     @Override

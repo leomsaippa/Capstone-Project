@@ -59,4 +59,9 @@ ext {
     gsonVersion = '2.8.0'
 
     playServicesPlaceVersion = '16.0.0'
+
+
+    roomVersion = '1.1.1'
+    liveDataVersion = '1.1.1'
+    lifecycleVersion = '1.1.1'
 }
