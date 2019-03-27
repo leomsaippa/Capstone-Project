@@ -14,10 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.travelguide.R;
-import com.travelguide.data.network.model.AttractionResult;
+import com.travelguide.data.network.model.PlaceResult;
+import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
-import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 
 import javax.inject.Inject;
@@ -28,6 +28,7 @@ import butterknife.ButterKnife;
 public class AttractionListFragment extends BaseFragment implements AttractionListMvpView, AttractionsAdapter.AttractionsAdapterOnClickHandler{
 
     public static final String TAG = AttractionListFragment.class.getSimpleName();
+    private static final String PARAM_SEARCH_RESPONSE = "SEARCH_RESPONSE_LIST";
 
     private int currentPage;
 
@@ -49,18 +50,30 @@ public class AttractionListFragment extends BaseFragment implements AttractionLi
 
     GridLayoutManager layoutManager;
 
+    private SearchPlaceResponse mSearchPlaceResponseList;
 
     @Inject
     AttractionListMvpPresenter<AttractionListMvpView> mPresenter;
 
-    public static AttractionListFragment getInstance() {
+    public static AttractionListFragment getInstance(SearchPlaceResponse searchPlaceResponseList) {
         Bundle args = new Bundle();
+        args.putParcelable(PARAM_SEARCH_RESPONSE, searchPlaceResponseList);
         AttractionListFragment attractionListFragment = new AttractionListFragment();
         attractionListFragment.setArguments(args);
         return attractionListFragment;
     }
 
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            mSearchPlaceResponseList = bundle.getParcelable(PARAM_SEARCH_RESPONSE);
+        }else{
+            Log.e(TAG,"Error on create");
+        }
+    }
 
     @Nullable
     @Override
@@ -81,6 +94,7 @@ public class AttractionListFragment extends BaseFragment implements AttractionLi
         mRecyclerView.setLayoutManager(layoutManager);
 
         mAdapter = new AttractionsAdapter(this);
+        setPlaceResponseList();
         mRecyclerView.setAdapter(mAdapter);
 
         mButtonTryAgain.setOnClickListener(new View.OnClickListener() {
@@ -106,14 +120,19 @@ public class AttractionListFragment extends BaseFragment implements AttractionLi
 
     }
 
+    private void setPlaceResponseList() {
+        mAdapter.setSearchPlaceResponseList(mSearchPlaceResponseList.getPlaceResult());
+        mAdapter.notifyDataSetChanged();
+    }
+
     private void loadAttractions(int currentPage) {
         //TODO adds logic to get more response from api
         mPresenter.onBtnLoadAttractionsClick();
     }
 
     @Override
-    public void onClick(AttractionResult attractionResult) {
-        openAttractionDetailFragment();
+    public void onClick(PlaceResult searchPlaceResult) {
+        openAttractionDetailFragment(searchPlaceResult);
     }
 
     private void showError(){
@@ -138,10 +157,10 @@ public class AttractionListFragment extends BaseFragment implements AttractionLi
     }
 
     @Override
-    public void openAttractionDetailFragment() {
+    public void openAttractionDetailFragment(PlaceResult searchPlaceResult) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_main, AttractionListFragment.getInstance(), AttractionDetailFragment.TAG)
+                .replace(R.id.content_main, AttractionDetailFragment.getInstance(searchPlaceResult), AttractionDetailFragment.TAG)
                 .commit();
     }
 }

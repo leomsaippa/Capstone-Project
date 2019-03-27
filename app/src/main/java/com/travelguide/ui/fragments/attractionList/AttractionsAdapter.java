@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.travelguide.R;
-import com.travelguide.data.network.model.AttractionResult;
+import com.travelguide.data.network.model.PlaceResult;
 
 import java.util.List;
 
@@ -19,29 +21,29 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
 
     private final AttractionsAdapterOnClickHandler mClickHandler;
 
-    private List<AttractionResult> attractionResultList;
+    private List<PlaceResult> searchPlaceResponseList;
 
 
-    void setAttractionResultList(List<AttractionResult> attractionResultList) {
-        if(attractionResultList != null){
-            this.attractionResultList.addAll(attractionResultList);
-
+    void setSearchPlaceResponseList(List<PlaceResult> placeResultList) {
+        if(searchPlaceResponseList != null){
+            this.searchPlaceResponseList.addAll(placeResultList);
         }else{
-            this.attractionResultList = attractionResultList;
+            Log.e(TAG,"Search place response is empty!");
+            this.searchPlaceResponseList = placeResultList;
         }
         notifyDataSetChanged();
     }
 
     void clear(){
-        if(attractionResultList !=null){
-            attractionResultList.clear();
+        if(searchPlaceResponseList !=null){
+            searchPlaceResponseList.clear();
         }else{
             Log.d(TAG,"Can't clear. AttractionResultList list is null!");
         }
     }
 
     public interface AttractionsAdapterOnClickHandler {
-        void onClick (AttractionResult attractionResult);
+        void onClick (PlaceResult searchPlaceResponse);
     }
 
     public AttractionsAdapter(AttractionsAdapterOnClickHandler mClickHandler) {
@@ -58,36 +60,46 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AttractionsAdapterViewHolder attractionsAdapterViewHolder, int i) {
+    public void onBindViewHolder(@NonNull AttractionsAdapterViewHolder holder, int position) {
+        PlaceResult placeResult = searchPlaceResponseList.get(position);
+        holder.bind(searchPlaceResponseList.get(position).name,
+                searchPlaceResponseList.get(position).icon,
+                searchPlaceResponseList.get(position).rating);
 
     }
 
     @Override
     public int getItemCount() {
-        if(attractionResultList ==null){
+        if(searchPlaceResponseList ==null){
             return 0;
         }
-        return attractionResultList.size();
+        return searchPlaceResponseList.size();
     }
 
     public class AttractionsAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        final TextView mTvName;
         final ImageView mIvAttraction;
+        final TextView mTvRating;
 
         public AttractionsAdapterViewHolder(View itemView) {
             super(itemView);
+            mTvName = itemView.findViewById(R.id.tv_name);
             mIvAttraction = itemView.findViewById(R.id.iv_attraction);
+            mTvRating = itemView.findViewById(R.id.tv_rating);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             Log.d(TAG,"onClick " + getAdapterPosition());
-            mClickHandler.onClick(attractionResultList.get((getAdapterPosition())));
+            mClickHandler.onClick(searchPlaceResponseList.get((getAdapterPosition())));
         }
 
-        void bind(String poster_path) {
-
+        void bind(String formattedAddress, String poster_path, Double rating) {
+            mTvName.setText(formattedAddress);
+            mTvRating.setText(String.valueOf(rating));
+            Picasso.get().load(poster_path).into(mIvAttraction);
         }
     }
 }

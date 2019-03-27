@@ -1,6 +1,7 @@
 package com.travelguide.ui.base;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,8 +10,11 @@ import android.widget.DatePicker;
 import com.travelguide.di.component.ActivityComponent;
 import com.travelguide.di.component.DaggerActivityComponent;
 import com.travelguide.di.module.ActivityModule;
+import com.travelguide.utils.CommonUtils;
 
 public class BaseActivity extends AppCompatActivity implements MvpView {
+
+    private ProgressDialog mProgressDialog;
 
     private ActivityComponent mActivityComponent;
 
@@ -29,4 +33,16 @@ public class BaseActivity extends AppCompatActivity implements MvpView {
         return mActivityComponent;
     }
 
+    @Override
+    public void showLoading(String title, String message) {
+        hideLoading();
+        mProgressDialog = CommonUtils.showLoadingDialog(this, title, message);
+    }
+
+    @Override
+    public void hideLoading() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.cancel();
+        }
+    }
 }

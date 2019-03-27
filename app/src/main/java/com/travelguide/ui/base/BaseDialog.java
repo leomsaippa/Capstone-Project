@@ -23,6 +23,18 @@ public class BaseDialog extends DialogFragment implements DialogMvpView {
         }
     }
 
+    @Override
+    public void showLoading(String title, String message) {
+        if (mActivity != null) {
+            mActivity.showLoading(title, message);
+        }
+    }
 
+    @Override
+    public void hideLoading() {
+        if (mActivity != null) {
+            mActivity.hideLoading();
+        }
+    }
 
 }
