@@ -135,6 +135,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
                 .commit();
     }
 
+    public void showFAB(){
+        mFab.show();
+    }
+
 //
 //    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 //        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
