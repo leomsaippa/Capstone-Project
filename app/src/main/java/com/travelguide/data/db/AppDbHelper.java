@@ -11,5 +11,9 @@ public class AppDbHelper implements DbHelper {
 
     }
 
-    //Adds information about database
+    @Override
+    public void createItinerary(String place) {
+
+    }
+
 }

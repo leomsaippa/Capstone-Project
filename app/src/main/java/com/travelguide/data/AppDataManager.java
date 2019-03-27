@@ -2,7 +2,6 @@ package com.travelguide.data;
 
 import javax.inject.Inject;
 
-import com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult;
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
@@ -17,6 +16,8 @@ public class AppDataManager implements DataManager{
     StringHelper mStringHelper;
     ApiHelper mApiHelper;
     PreferencesHelper mPreferencesHelper;
+
+    String place = "";
 
     @Inject
     public AppDataManager(DbHelper dbHelper, StringHelper stringHelper,
@@ -39,6 +40,12 @@ public class AppDataManager implements DataManager{
         return mStringHelper.generateQuery(place);
     }
 
+
+    @Override
+    public void setCurrentPlace(String place) {
+        this.place = place;
+    }
+
     @Override
     public void apiSetEndPoint(String endpoint) {
         mApiHelper.apiSetEndPoint(endpoint);
@@ -55,4 +62,13 @@ public class AppDataManager implements DataManager{
     }
 
 
+    @Override
+    public void createItinerary(String place) {
+        mDbHelper.createItinerary(place);
+    }
+
+    @Override
+    public String getPlace() {
+        return place;
+    }
 }
