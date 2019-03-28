@@ -83,5 +83,35 @@ public class Itinerary implements Parcelable {
         }
     };
 
+    public Integer getId() {
+        return id;
+    }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getNumber_days() {
+        return number_days;
+    }
+
+    public void setNumber_days(Integer number_days) {
+        this.number_days = number_days;
+    }
+
+    public List<Day> getList_days() {
+        return list_days;
+    }
+
+    public void setList_days(List<Day> list_days) {
+        this.list_days = list_days;
+    }
 }

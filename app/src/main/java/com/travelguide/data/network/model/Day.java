@@ -6,11 +6,39 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Day implements Parcelable {
 
     @SerializedName("selected_attractions")
     @Expose
     private Integer selected_attractions;
+
+    @SerializedName("attractions")
+    @Expose
+    private List<String> attractions;
+
+    private int id;
+
+    public Day(int id){
+        this.id = id;
+    }
+
+    public Integer getSelected_attractions() {
+        return selected_attractions;
+    }
+
+    public void setSelected_attractions(Integer selected_attractions) {
+        this.selected_attractions = selected_attractions;
+    }
+
+    public List<String> getAttractions() {
+        return attractions;
+    }
+
+    public void setAttractions(List<String> attractions) {
+        this.attractions = attractions;
+    }
 
     protected Day(Parcel in) {
         if (in.readByte() == 0) {
@@ -18,6 +46,8 @@ public class Day implements Parcelable {
         } else {
             selected_attractions = in.readInt();
         }
+        attractions = in.createStringArrayList();
+        id = in.readInt();
     }
 
     public static final Creator<Day> CREATOR = new Creator<Day>() {
@@ -32,6 +62,10 @@ public class Day implements Parcelable {
         }
     };
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -45,5 +79,7 @@ public class Day implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(selected_attractions);
         }
+        dest.writeStringList(attractions);
+        dest.writeInt(id);
     }
 }

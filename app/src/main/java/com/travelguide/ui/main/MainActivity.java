@@ -23,6 +23,8 @@ import butterknife.OnClick;
 
 import com.travelguide.R;
 import com.travelguide.ui.base.BaseActivity;
+import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
+import com.travelguide.ui.fragments.itineraryList.ItineraryListFragment;
 import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 
 import java.util.Calendar;
@@ -113,7 +115,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            mPresenter.onConfirmItinerary();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -137,6 +139,14 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
                 .commit();
     }
 
+    @Override
+    public void showItineraryListFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_main, ItineraryListFragment.getInstance(), SearchPlaceFragment.TAG)
+                .commit();
+    }
+
     public void showFAB(){
         mFab.show();
     }
@@ -144,7 +154,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
 
     @OnClick(R.id.fab)
     public void onFabClick(View view){
-        mPresenter.onFabClick();
+        AttractionDetailFragment currentFragment = (AttractionDetailFragment) getSupportFragmentManager().findFragmentByTag(AttractionDetailFragment.TAG);
+        if(currentFragment != null)
+        {
+            currentFragment.showCalendar();
+        }
     }
-
 }

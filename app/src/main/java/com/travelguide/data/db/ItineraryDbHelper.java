@@ -11,7 +11,7 @@ import com.travelguide.data.network.model.Itinerary;
 @Database(entities = {Itinerary.class}, version = 1, exportSchema = false)
 public abstract class ItineraryDbHelper extends RoomDatabase {
 
-    private static final Object LOCK = new Object();
+     private static final Object LOCK = new Object();
     private static final String DATABASE_NAME = "itinerary";
     private static ItineraryDbHelper instance;
 

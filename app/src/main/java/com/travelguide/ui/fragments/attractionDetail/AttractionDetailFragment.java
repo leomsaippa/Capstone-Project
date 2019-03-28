@@ -12,14 +12,20 @@ import android.widget.TextView;
 import com.travelguide.R;
 import com.travelguide.data.network.model.PlaceResult;
 import com.travelguide.ui.base.BaseFragment;
+import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 import com.travelguide.ui.main.MainActivity;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AttractionDetailFragment extends BaseFragment implements AttractionDetailMvpView{
+public class AttractionDetailFragment extends BaseFragment implements AttractionDetailMvpView, DatePickerFragment.OnSelectedDate{
 
     public static final String TAG = AttractionDetailFragment.class.getSimpleName();
 
@@ -77,5 +83,20 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         return view;
 
     }
+
+
+    public void showCalendar(){
+        DatePickerFragment fragment = new DatePickerFragment();
+        if(getFragmentManager()!=null)
+            fragment.show(getChildFragmentManager(),DatePickerFragment.TAG);
+    }
+
+    @Override
+    public void onSelectedDate(int year, int month, int dayOfMonth) {
+        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+        Date date = calendar.getTime();
+        mPresenter.addAttraction(searchPlaceResult.name, date);
+    }
+
 
 }

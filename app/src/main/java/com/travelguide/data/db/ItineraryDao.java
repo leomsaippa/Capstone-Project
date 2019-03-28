@@ -19,8 +19,8 @@ public interface ItineraryDao {
     LiveData<Itinerary> getItinerary(int itineraryId);
 
     @Insert
-    void insertItinerary(Itinerary movie);
+    void insertItinerary(Itinerary itinerary);
 
     @Delete
-    void deleteItinerary(Itinerary movie);
+    void deleteItinerary(Itinerary itinerary);
 }
