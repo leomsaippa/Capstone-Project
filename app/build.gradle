@@ -82,7 +82,17 @@ dependencies {
     //Json parser
     implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
 
+    //OkHttp interceptor
     implementation 'com.squareup.okhttp3:okhttp:3.14.0'
+
+
+    //Room
+    implementation "android.arch.persistence.room:runtime:$roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
+    implementation "android.arch.lifecycle:livedata:$liveDataVersion"
+
+    implementation "android.arch.lifecycle:extensions:$lifecycleVersion"
+    implementation "android.arch.lifecycle:viewmodel:$lifecycleVersion"
 
     //test
     testImplementation "junit:junit:$rootProject.ext.junitVersion"

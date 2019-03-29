@@ -1,13 +1,15 @@
 package com.travelguide.data;
 
+
 import javax.inject.Inject;
 
-import com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult;
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.data.prefs.PreferencesHelper;
+
+import java.util.Date;
 
 import io.reactivex.Observable;
 
@@ -39,6 +41,12 @@ public class AppDataManager implements DataManager{
         return mStringHelper.generateQuery(place);
     }
 
+
+    @Override
+    public void setCurrentPlace(String place) {
+        mDbHelper.setCurrentPlace(place);
+    }
+
     @Override
     public void apiSetEndPoint(String endpoint) {
         mApiHelper.apiSetEndPoint(endpoint);
@@ -54,5 +62,37 @@ public class AppDataManager implements DataManager{
         return mStringHelper.getMessageLoading();
     }
 
+
+    @Override
+    public String getCurrentPlace() {
+        return mDbHelper.getCurrentPlace();
+    }
+
+    @Override
+    public void addAttraction(String name, Date date) {
+        mDbHelper.addAttraction(name,date);
+    }
+
+
+    @Override
+    public void setQuantityDays(long quantityDays) {
+        mDbHelper.setQuantityDays(quantityDays);
+
+    }
+
+    @Override
+    public void setDateBeginTravel(Date dateBeginTravel) {
+        mDbHelper.setDateBeginTravel(dateBeginTravel);
+    }
+
+    @Override
+    public void setDateEndTravel(Date dateEndTravel) {
+        mDbHelper.setDateEndTravel(dateEndTravel);
+    }
+
+    @Override
+    public void onConfirmItinerary(String currentPlace) {
+        mDbHelper.onConfirmItinerary(currentPlace);
+    }
 
 }

@@ -18,6 +18,7 @@ import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
@@ -44,6 +45,8 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     EditText mPlaceName;
 
     boolean beginCall = false;
+    Date dateBegin;
+    Date dateEnd;
 
     @Inject
     SearchPlaceMvpPresenter<SearchPlaceMvpView> mPresenter;
@@ -80,7 +83,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @OnClick(R.id.btn_search)
     public void onClickBtnSearch(View view){
         mPlaceName.requestFocus();
-        mPresenter.onBtnSearchClick(mPlaceName.getText().toString());
+        mPresenter.onBtnSearchClick(mPlaceName.getText().toString(),dateBegin,dateEnd);
 
     }
 
@@ -103,28 +106,45 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onSelectedDate(int year, int month, int dayOfMonth) {
         Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
         //TODO adicionar logica para verificar se a data de volta é menor que a de ida
-        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        Date date = calendar.getTime();
         if(beginCall){
-            mTextBeginTravel.setText(dateFormat.format(calendar.getTime()));
+            dateBegin = date;
+            mTextBeginTravel.setText(date.toString());
             beginCall = false;
         }else{
-            mTextEndTravel.setText(dateFormat.format(calendar.getTime()));
+            dateEnd = date;
+            mTextEndTravel.setText(date.toString());
             beginCall = true;
         }
 
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public void onErrorEmptyPlace() {
         mPlaceName.setError(getString(R.string.error_empty_place));
+    }
+
+    @Override
+    public void onErrorEmptyBeginTravel() {
+        mTextBeginTravel.setError(getString(R.string.error_empty_begin_travel));
+    }
+
+    @Override
+    public void onErrorEmptyEndTravel() {
+        mTextEndTravel.setError(getString(R.string.error_empty_end_travel));
+    }
+
+    @Override
+    public void onErrorInvalidDate() {
+        mTextEndTravel.setError(getString(R.string.error_invalid_date));
     }
 
     @Override

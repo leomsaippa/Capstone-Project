@@ -1,5 +1,6 @@
 package com.travelguide.ui.main;
 
+
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -17,4 +18,9 @@ public class MainPresenter<V extends MainMvpView> extends BasePresenter<V>
     }
 
 
+    @Override
+    public void onConfirmItinerary() {
+        getDataManager().onConfirmItinerary(getDataManager().getCurrentPlace());
+        getMvpView().showItineraryListFragment();
+    }
 }

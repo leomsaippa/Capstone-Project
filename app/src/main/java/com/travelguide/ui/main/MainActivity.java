@@ -12,15 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import com.travelguide.R;
 import com.travelguide.ui.base.BaseActivity;
+import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
+import com.travelguide.ui.fragments.itineraryList.ItineraryListFragment;
 import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 
 import java.util.Calendar;
@@ -111,7 +115,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            mPresenter.onConfirmItinerary();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -135,16 +139,25 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
                 .commit();
     }
 
+    @Override
+    public void showItineraryListFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_main, ItineraryListFragment.getInstance(), SearchPlaceFragment.TAG)
+                .commit();
+    }
+
     public void showFAB(){
         mFab.show();
     }
 
-//
-//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-//        Log.d(TAG,"onDateSet" + calendar);
-//        SearchPlaceFragment fragment =  (SearchPlaceFragment) getSupportFragmentManager().findFragmentByTag(SearchPlaceFragment.TAG);
-//        if(fragment != null)
-//            fragment.onCalendarResult(calendar);
-//    }
+
+    @OnClick(R.id.fab)
+    public void onFabClick(View view){
+        AttractionDetailFragment currentFragment = (AttractionDetailFragment) getSupportFragmentManager().findFragmentByTag(AttractionDetailFragment.TAG);
+        if(currentFragment != null)
+        {
+            currentFragment.showCalendar();
+        }
+    }
 }
