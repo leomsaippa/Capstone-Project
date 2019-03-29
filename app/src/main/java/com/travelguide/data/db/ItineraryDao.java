@@ -12,6 +12,7 @@ import java.util.List;
 
 @Dao
 public interface ItineraryDao {
+
     @Query("SELECT * FROM itinerary")
     LiveData<List<Itinerary>> loadAllItineraries();
 

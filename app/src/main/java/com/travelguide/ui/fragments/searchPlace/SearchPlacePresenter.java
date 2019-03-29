@@ -36,7 +36,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                     long quantityDays = dateEndTravel.getTime() - dateBeginTravel.getTime();
                     getDataManager().setQuantityDays(quantityDays);
                     getDataManager().setDateBeginTravel(dateBeginTravel);
-                    getDataManager().setEndTravel(dateEndTravel);
+                    getDataManager().setDateEndTravel(dateEndTravel);
                     if (place == null || place.isEmpty()) {
                         getMvpView().onErrorEmptyPlace();
                     } else {

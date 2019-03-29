@@ -3,15 +3,18 @@ package com.travelguide.data.network.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.travelguide.data.db.DateConverter;
 
 import java.util.List;
 
 @Entity(tableName = "itinerary")
+@TypeConverters(DateConverter.class)
 public class Itinerary implements Parcelable {
 
     @SerializedName("id")
@@ -26,7 +29,6 @@ public class Itinerary implements Parcelable {
     @SerializedName("number_days")
     @Expose
     private Integer number_days;
-
     @SerializedName("list_days")
     @Expose
     private List<Day> list_days;

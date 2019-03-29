@@ -1,19 +1,15 @@
 package com.travelguide.data;
 
-import android.content.Context;
 
 import javax.inject.Inject;
 
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
-import com.travelguide.data.network.model.Day;
-import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.data.prefs.PreferencesHelper;
 
 import java.util.Date;
-import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -24,15 +20,6 @@ public class AppDataManager implements DataManager{
     ApiHelper mApiHelper;
     PreferencesHelper mPreferencesHelper;
 
-    String place = "";
-    long quantityDays = 0;
-    Date dateBegin;
-    Date dateEnd;
-    List<Day> days;
-
-    int numberItineraries = 0;
-
-    Itinerary itinerary;
     @Inject
     public AppDataManager(DbHelper dbHelper, StringHelper stringHelper,
                           ApiHelper apiHelper, PreferencesHelper preferencesHelper){
@@ -57,7 +44,7 @@ public class AppDataManager implements DataManager{
 
     @Override
     public void setCurrentPlace(String place) {
-        this.place = place;
+        mDbHelper.setCurrentPlace(place);
     }
 
     @Override
@@ -78,46 +65,34 @@ public class AppDataManager implements DataManager{
 
     @Override
     public String getCurrentPlace() {
-        return place;
+        return mDbHelper.getCurrentPlace();
     }
 
     @Override
     public void addAttraction(String name, Date date) {
-        long diff  = date.getTime() - dateBegin.getTime();
-        days.get((int) diff).getAttractions().add(name);
-
+        mDbHelper.addAttraction(name,date);
     }
 
 
     @Override
     public void setQuantityDays(long quantityDays) {
-        this.quantityDays = quantityDays;
-        for(int i=0;i<quantityDays;i++){
-            Day day = new Day(i);
-            days.add(day);
-        }
+        mDbHelper.setQuantityDays(quantityDays);
+
     }
 
     @Override
     public void setDateBeginTravel(Date dateBeginTravel) {
-        dateBegin = dateBeginTravel;
+        mDbHelper.setDateBeginTravel(dateBeginTravel);
     }
 
     @Override
-    public void setEndTravel(Date dateEndTravel) {
-        dateEnd = dateEndTravel;
+    public void setDateEndTravel(Date dateEndTravel) {
+        mDbHelper.setDateEndTravel(dateEndTravel);
     }
 
     @Override
-    public void onConfirmItinerary(String currentPlace, Context mContext) {
-        numberItineraries++;
-        itinerary = new Itinerary(numberItineraries,currentPlace,days.size(),days);
-        mDbHelper.createItinerary(itinerary,mContext);
-
+    public void onConfirmItinerary(String currentPlace) {
+        mDbHelper.onConfirmItinerary(currentPlace);
     }
 
-    @Override
-    public void createItinerary(Itinerary itinerary, Context mContext) {
-        mDbHelper.createItinerary(itinerary,mContext);
-    }
 }

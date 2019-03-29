@@ -25,7 +25,7 @@ public interface DataManager extends DbHelper, StringHelper, ApiHelper, Preferen
 
     void setDateBeginTravel(Date dateBeginTravel);
 
-    void setEndTravel(Date dateEndTravel);
+    void setDateEndTravel(Date dateEndTravel);
 
-    void onConfirmItinerary(String currentPlace, Context context);
+    void onConfirmItinerary(String currentPlace);
 }
