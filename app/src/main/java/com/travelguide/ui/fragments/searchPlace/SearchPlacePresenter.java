@@ -7,7 +7,9 @@ import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.AppConstants;
 import com.travelguide.utils.rx.SchedulerProvider;
 
-import java.util.Date;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 import javax.inject.Inject;
 
@@ -23,17 +25,19 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
     }
 
     @Override
-    public void onBtnSearchClick(final String place, Date dateBeginTravel, Date dateEndTravel) {
+    public void onBtnSearchClick(final String place, LocalDate dateBeginTravel, LocalDate dateEndTravel) {
+
+        int quantityDays = Days.daysBetween(dateBeginTravel,dateEndTravel).getDays();
+
         if (dateBeginTravel == null || dateBeginTravel.toString().isEmpty()){
             getMvpView().onErrorEmptyBeginTravel();
         }else {
             if (dateEndTravel == null || dateEndTravel.toString().isEmpty()) {
                 getMvpView().onErrorEmptyEndTravel();
             } else {
-                if (dateEndTravel.before(dateBeginTravel)) {
+                if (quantityDays<=0) {
                     getMvpView().onErrorInvalidDate();
                 } else {
-                    long quantityDays = dateEndTravel.getTime() - dateBeginTravel.getTime();
                     getDataManager().setQuantityDays(quantityDays);
                     getDataManager().setDateBeginTravel(dateBeginTravel);
                     getDataManager().setDateEndTravel(dateEndTravel);

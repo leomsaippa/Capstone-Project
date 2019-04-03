@@ -59,8 +59,6 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
 
     ItineraryDbHelper mDb;
 
-    List<Itinerary> itineraryList;
-
     @Inject
     ItineraryListMvpPresenter<ItineraryListMvpView> mPresenter;
 
@@ -113,8 +111,13 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
     }
 
     private void loadItineraries() {
-        itinerariesViewModel.getItineraries().observe(this,
-                itineraries -> Log.d(TAG,"Load itineraries " + itineraries.get(0).getName()));
+        itinerariesViewModel.getItineraries().observe(this, itineraries -> {
+            mAdapter.clear();
+            mAdapter.notifyDataSetChanged();
+            mAdapter.setItineraryList(itineraries);
+            showList();
+            mAdapter.notifyDataSetChanged();
+        });
     }
 
 
@@ -145,6 +148,7 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
     @Override
     public void onCLick(Itinerary itinerary) {
         Log.d(TAG,"Itinerary " + itinerary.getName());
+        loadItinerary(itinerary.getId());
         openItineraryDetailFragment(itinerary);
     }
 
@@ -156,12 +160,8 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
     }
 
 
-    private void setItineraryList() {
-        mAdapter.setItineraryList(itineraryList);
-        mAdapter.notifyDataSetChanged();
-    }
 
-    private void loadItineraries(int currentPage) {
+    private void loadMoreItineraries(int currentPage) {
         //TODO adds logic to get more response from db
         mPresenter.onBtnLoadItinerariesClick();
     }
@@ -188,6 +188,10 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
         mButtonTryAgain.setVisibility(View.INVISIBLE);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        removeObservers();
+    }
 
 }

@@ -3,6 +3,7 @@ package com.travelguide.ui.fragments.searchPlace;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,17 @@ import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -45,8 +53,8 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     EditText mPlaceName;
 
     boolean beginCall = false;
-    Date dateBegin;
-    Date dateEnd;
+    LocalDate dateBegin;
+    LocalDate dateEnd;
 
     @Inject
     SearchPlaceMvpPresenter<SearchPlaceMvpView> mPresenter;
@@ -65,6 +73,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
         View view = inflater.inflate(R.layout.frag_search_place,container,false);
 
 
@@ -74,6 +83,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
         mPresenter.onAttach(this);
 
+        JodaTimeAndroid.init(getContext());
         mPresenter.setApiEndPoint();
 
         return view;
@@ -108,15 +118,19 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @Override
     public void onSelectedDate(int year, int month, int dayOfMonth) {
         Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-        //TODO adicionar logica para verificar se a data de volta é menor que a de ida
-        Date date = calendar.getTime();
+        TimeZone timeZone = calendar.getTimeZone();
+        DateTimeZone jodaDateTimeZone = DateTimeZone.forID(timeZone.getID());
+        DateTime dateTime = new DateTime(calendar.getTimeInMillis(), jodaDateTimeZone);
+
+        LocalDate localDate = dateTime.toLocalDate();
+
         if(beginCall){
-            dateBegin = date;
-            mTextBeginTravel.setText(date.toString());
+            dateBegin = localDate;
+            mTextBeginTravel.setText(localDate.toString());
             beginCall = false;
         }else{
-            dateEnd = date;
-            mTextEndTravel.setText(date.toString());
+            dateEnd = localDate;
+            mTextEndTravel.setText(localDate.toString());
             beginCall = true;
         }
 

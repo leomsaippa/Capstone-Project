@@ -6,8 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.travelguide.R;
+import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.Itinerary;
 
 import java.util.List;
@@ -43,13 +48,25 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
     @Override
     public ItineraryAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View view = inflater.inflate(R.layout.attraction_list_item,viewGroup, false);
+        View view = inflater.inflate(R.layout.itinerary_list_item,viewGroup, false);
         return new ItineraryAdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItineraryAdapterViewHolder itineraryAdapterViewHolder, int i) {
-        itineraryAdapterViewHolder.bind();
+    public void onBindViewHolder(@NonNull ItineraryAdapterViewHolder itineraryAdapterViewHolder, int position) {
+        List<Day> list = itineraryList.get(position).getList_days();
+        //Todo verificar null
+        int numberAttractions = 0;
+        for(int i=0;i<list.size();i++){
+            numberAttractions+=list.get(0).getSelected_attractions();
+        }
+        //todo get days
+        itineraryAdapterViewHolder.bind(itineraryList.get(position).getName(),
+                "20/11 a 26/11",
+                "",
+                //itineraryList.get(position).getPhotos().get(0),
+                String.valueOf(itineraryList.get(position).getNumber_days()),
+                String.valueOf(numberAttractions));
     }
 
     @Override
@@ -75,8 +92,22 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
     public class ItineraryAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 
+        final TextView mTvName;
+        final TextView mTvDate;
+        final ImageView mIvAttraction;
+        final TextView mTvDays;
+        final TextView mTvAttractions;
+        final Button mBtnSeeDetails;
+
+
         public ItineraryAdapterViewHolder(View itemView) {
             super(itemView);
+            mTvName = itemView.findViewById(R.id.tv_itinerary_item_name);
+            mTvDate = itemView.findViewById(R.id.tv_itinerary_item_date);
+            mIvAttraction = itemView.findViewById(R.id.iv_itinerary_item_image);
+            mTvDays = itemView.findViewById(R.id.tv_itinerary_days);
+            mTvAttractions = itemView.findViewById(R.id.selected_attractions_quantity);
+            mBtnSeeDetails = itemView.findViewById(R.id.btn_itinerary_item_detail);
             itemView.setOnClickListener(this);
         }
 
@@ -86,7 +117,15 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             mClickHandler.onCLick(itineraryList.get((getAdapterPosition())));
         }
 
-        void bind() {
+        void bind(String name, String date, String poster_path, String days,
+                  String quantity) {
+            mTvName.setText(name);
+            mTvDate.setText(date);
+            mTvDays.setText(days);
+            mTvAttractions.setText(quantity);
+
+            Picasso.get().load(poster_path).into(mIvAttraction);
+
         }
     }
 

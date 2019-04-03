@@ -6,8 +6,15 @@ import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.Travel;
 import com.travelguide.di.ApplicationContext;
+import com.travelguide.utils.AppExecutors;
 
-import java.util.Date;
+import org.joda.time.DateTimeComparator;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,8 +34,14 @@ public class AppDbHelper implements DbHelper {
 
 
     public void createItinerary(Itinerary itinerary) {
-        ItineraryDbHelper itineraryDbHelper = ItineraryDbHelper.getInstance(mContext);
-        itineraryDbHelper.itineraryDao().insertItinerary(itinerary);
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                ItineraryDbHelper itineraryDbHelper = ItineraryDbHelper.getInstance(mContext);
+                itineraryDbHelper.itineraryDao().insertItinerary(itinerary);
+            }
+        });
+
     }
 
     @Override
@@ -43,26 +56,32 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
-    public void addAttraction(String name, Date date) {
-        long diff  = date.getTime() - mTravel.getDateBegin().getTime();
-        mTravel.getDays().get((int) diff).getAttractions().add(name);
+    public void addAttraction(String name, LocalDate date) {
+        int quantityDays = Days.daysBetween(mTravel.getDateBegin(), date).getDays();
+        //todo get and asserts not null
+        List<String> attractions = new ArrayList<>();
+        attractions.add(name);
+        mTravel.getDays().get(quantityDays).setAttractions(attractions);
     }
 
     @Override
     public void setQuantityDays(long quantityDays) {
+        List<Day> days = new ArrayList<>();
         for(int i=0;i<quantityDays;i++){
             Day day = new Day(i);
-            mTravel.getDays().add(day);
+            days.add(day);
         }
+        mTravel.setDays(days);
+
     }
 
     @Override
-    public void setDateBeginTravel(Date dateBeginTravel) {
+    public void setDateBeginTravel(LocalDate dateBeginTravel) {
         mTravel.setDateBegin(dateBeginTravel);
     }
 
     @Override
-    public void setDateEndTravel(Date dateEndTravel) {
+    public void setDateEndTravel(LocalDate dateEndTravel) {
         mTravel.setDateEnd(dateEndTravel);
     }
 
@@ -70,7 +89,7 @@ public class AppDbHelper implements DbHelper {
     public void onConfirmItinerary(String place) {
         int count = mTravel.getCountItineraries();
         mTravel.setCountItineraries(count++);
-        Itinerary itinerary = new Itinerary(mTravel.getCountItineraries(),
+        Itinerary itinerary = new Itinerary(Integer.valueOf(987654321),
                 mTravel.getCurrentPlace(),
                 mTravel.getDays().size(),
                 mTravel.getDays());

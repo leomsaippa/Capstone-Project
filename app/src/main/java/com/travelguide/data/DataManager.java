@@ -1,13 +1,13 @@
 package com.travelguide.data;
 
-import android.content.Context;
-
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
 import com.travelguide.data.prefs.PreferencesHelper;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+
+import java.text.DateFormat;
 
 public interface DataManager extends DbHelper, StringHelper, ApiHelper, PreferencesHelper {
 
@@ -19,13 +19,13 @@ public interface DataManager extends DbHelper, StringHelper, ApiHelper, Preferen
 
     String getCurrentPlace();
 
-    void addAttraction(String name, Date date);
+    void addAttraction(String name, LocalDate date);
 
     void setQuantityDays(long quantityDays);
 
-    void setDateBeginTravel(Date dateBeginTravel);
+    void setDateBeginTravel(LocalDate dateBeginTravel);
 
-    void setDateEndTravel(Date dateEndTravel);
+    void setDateEndTravel(LocalDate dateEndTravel);
 
     void onConfirmItinerary(String currentPlace);
 }

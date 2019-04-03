@@ -15,10 +15,17 @@ import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 import com.travelguide.ui.main.MainActivity;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -67,6 +74,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
 
         View view = inflater.inflate(R.layout.frag_attraction_detail,container,false);
 
+        JodaTimeAndroid.init(getContext());
 
         getActivityComponent().inject(this);
 
@@ -93,9 +101,14 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
 
     @Override
     public void onSelectedDate(int year, int month, int dayOfMonth) {
+
         Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-        Date date = calendar.getTime();
-        mPresenter.addAttraction(searchPlaceResult.name, date);
+        TimeZone timeZone = calendar.getTimeZone();
+        DateTimeZone jodaDateTimeZone = DateTimeZone.forID(timeZone.getID());
+        DateTime dateTime = new DateTime(calendar.getTimeInMillis(), jodaDateTimeZone);
+
+        LocalDate localDate = dateTime.toLocalDate();
+        mPresenter.addAttraction(searchPlaceResult.name, localDate);
     }
 
 

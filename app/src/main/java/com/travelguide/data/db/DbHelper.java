@@ -1,6 +1,8 @@
 package com.travelguide.data.db;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+
+import java.text.DateFormat;
 
 public interface DbHelper {
 
@@ -8,13 +10,13 @@ public interface DbHelper {
 
     String getCurrentPlace();
 
-    void addAttraction(String name, Date date);
+    void addAttraction(String name, LocalDate date);
 
     void setQuantityDays(long quantityDays);
 
-    void setDateBeginTravel(Date dateBeginTravel);
+    void setDateBeginTravel(LocalDate dateBeginTravel);
 
-    void setDateEndTravel(Date dateEndTravel);
+    void setDateEndTravel(LocalDate dateEndTravel);
 
     void onConfirmItinerary(String place);
 }

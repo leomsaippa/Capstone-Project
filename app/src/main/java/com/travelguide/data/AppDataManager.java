@@ -9,7 +9,9 @@ import com.travelguide.data.network.ApiHelper;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.data.prefs.PreferencesHelper;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+
+import java.text.DateFormat;
 
 import io.reactivex.Observable;
 
@@ -69,7 +71,7 @@ public class AppDataManager implements DataManager{
     }
 
     @Override
-    public void addAttraction(String name, Date date) {
+    public void addAttraction(String name, LocalDate date) {
         mDbHelper.addAttraction(name,date);
     }
 
@@ -81,12 +83,12 @@ public class AppDataManager implements DataManager{
     }
 
     @Override
-    public void setDateBeginTravel(Date dateBeginTravel) {
+    public void setDateBeginTravel(LocalDate dateBeginTravel) {
         mDbHelper.setDateBeginTravel(dateBeginTravel);
     }
 
     @Override
-    public void setDateEndTravel(Date dateEndTravel) {
+    public void setDateEndTravel(LocalDate dateEndTravel) {
         mDbHelper.setDateEndTravel(dateEndTravel);
     }
 
