@@ -84,6 +84,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
         mPresenter.onAttach(this);
 
         JodaTimeAndroid.init(getContext());
+
         mPresenter.setApiEndPoint();
 
         return view;

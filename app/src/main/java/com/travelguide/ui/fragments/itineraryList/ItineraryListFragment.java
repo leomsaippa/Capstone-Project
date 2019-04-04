@@ -24,9 +24,6 @@ import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.itineraryDetail.ItineraryDetailFragment;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 
-
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;

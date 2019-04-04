@@ -5,6 +5,7 @@ import android.util.Log;
 import com.travelguide.data.DataManager;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.AppConstants;
+import com.travelguide.utils.CommonUtils;
 import com.travelguide.utils.rx.SchedulerProvider;
 
 import org.joda.time.DateTimeComparator;
@@ -38,9 +39,8 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                 if (quantityDays<=0) {
                     getMvpView().onErrorInvalidDate();
                 } else {
-                    getDataManager().setQuantityDays(quantityDays);
-                    getDataManager().setDateBeginTravel(dateBeginTravel);
-                    getDataManager().setDateEndTravel(dateEndTravel);
+                    getDataManager().createItinerary(place,quantityDays,dateBeginTravel,
+                            dateEndTravel, CommonUtils.createDays(quantityDays));
                     if (place == null || place.isEmpty()) {
                         getMvpView().onErrorEmptyPlace();
                     } else {

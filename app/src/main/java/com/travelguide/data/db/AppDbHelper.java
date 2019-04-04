@@ -1,5 +1,6 @@
 package com.travelguide.data.db;
 
+import android.arch.lifecycle.LiveData;
 import android.content.Context;
 
 import com.travelguide.data.network.model.Day;
@@ -8,11 +9,9 @@ import com.travelguide.data.network.model.Travel;
 import com.travelguide.di.ApplicationContext;
 import com.travelguide.utils.AppExecutors;
 
-import org.joda.time.DateTimeComparator;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,76 +23,46 @@ public class AppDbHelper implements DbHelper {
 
     private final Context mContext;
 
-    private Travel mTravel;
+    private long currentId = 0;
+
+    ItineraryDbHelper itineraryDbHelper;
 
     @Inject
     public AppDbHelper(@ApplicationContext Context context){
         this.mContext = context;
-        mTravel = new Travel();
-    }
-
-
-    public void createItinerary(Itinerary itinerary) {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                ItineraryDbHelper itineraryDbHelper = ItineraryDbHelper.getInstance(mContext);
-                itineraryDbHelper.itineraryDao().insertItinerary(itinerary);
-            }
-        });
-
-    }
-
-    @Override
-    public void setCurrentPlace(String currentPlace) {
-        mTravel.setCurrentPlace(currentPlace);
-
-    }
-
-    @Override
-    public String getCurrentPlace() {
-        return mTravel.getCurrentPlace();
+        itineraryDbHelper = ItineraryDbHelper.getInstance(mContext);
     }
 
     @Override
     public void addAttraction(String name, LocalDate date) {
-        int quantityDays = Days.daysBetween(mTravel.getDateBegin(), date).getDays();
-        //todo get and asserts not null
-        List<String> attractions = new ArrayList<>();
-        attractions.add(name);
-        mTravel.getDays().get(quantityDays).setAttractions(attractions);
-    }
+        Integer id = (int) (long) currentId;
+        final LiveData<Itinerary> itinerary = itineraryDbHelper.itineraryDao().getItinerary(id);
 
-    @Override
-    public void setQuantityDays(long quantityDays) {
-        List<Day> days = new ArrayList<>();
-        for(int i=0;i<quantityDays;i++){
-            Day day = new Day(i);
-            days.add(day);
+        if(itinerary.getValue() !=null){
+            LocalDate dayBegin = itinerary.getValue().getDayBegin();
+            int quantityDays = Days.daysBetween(dayBegin, date).getDays();
+            List<String> attractions = itinerary.getValue().getList_days().get(quantityDays).getAttractions();
+            attractions.add(name);
+            itinerary.getValue().getList_days().get(quantityDays).setAttractions(attractions);
+
         }
-        mTravel.setDays(days);
-
-    }
-
-    @Override
-    public void setDateBeginTravel(LocalDate dateBeginTravel) {
-        mTravel.setDateBegin(dateBeginTravel);
-    }
-
-    @Override
-    public void setDateEndTravel(LocalDate dateEndTravel) {
-        mTravel.setDateEnd(dateEndTravel);
     }
 
     @Override
     public void onConfirmItinerary(String place) {
-        int count = mTravel.getCountItineraries();
-        mTravel.setCountItineraries(count++);
-        Itinerary itinerary = new Itinerary(Integer.valueOf(987654321),
-                mTravel.getCurrentPlace(),
-                mTravel.getDays().size(),
-                mTravel.getDays());
 
-        createItinerary(itinerary);
+    }
+
+    @Override
+    public void createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days) {
+        Itinerary itinerary = new Itinerary(place, quantityDays, dateBeginTravel, dateEndTravel, days);
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+
+                currentId = itineraryDbHelper.itineraryDao().insertItinerary(itinerary);
+            }
+        });
     }
 }

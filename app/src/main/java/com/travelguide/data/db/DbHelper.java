@@ -1,22 +1,17 @@
 package com.travelguide.data.db;
 
+import com.travelguide.data.network.model.Day;
+
 import org.joda.time.LocalDate;
 
 import java.text.DateFormat;
+import java.util.List;
 
 public interface DbHelper {
 
-    void setCurrentPlace(String place);
-
-    String getCurrentPlace();
-
     void addAttraction(String name, LocalDate date);
 
-    void setQuantityDays(long quantityDays);
-
-    void setDateBeginTravel(LocalDate dateBeginTravel);
-
-    void setDateEndTravel(LocalDate dateEndTravel);
-
     void onConfirmItinerary(String place);
+
+    void createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days);
 }

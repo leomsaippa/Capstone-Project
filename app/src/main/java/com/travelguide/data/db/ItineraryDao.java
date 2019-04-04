@@ -20,7 +20,7 @@ public interface ItineraryDao {
     LiveData<Itinerary> getItinerary(int itineraryId);
 
     @Insert
-    void insertItinerary(Itinerary itinerary);
+    long insertItinerary(Itinerary itinerary);
 
     @Delete
     void deleteItinerary(Itinerary itinerary);

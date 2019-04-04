@@ -6,12 +6,13 @@ import javax.inject.Inject;
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
+import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.data.prefs.PreferencesHelper;
 
 import org.joda.time.LocalDate;
 
-import java.text.DateFormat;
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -45,11 +46,6 @@ public class AppDataManager implements DataManager{
 
 
     @Override
-    public void setCurrentPlace(String place) {
-        mDbHelper.setCurrentPlace(place);
-    }
-
-    @Override
     public void apiSetEndPoint(String endpoint) {
         mApiHelper.apiSetEndPoint(endpoint);
     }
@@ -66,35 +62,19 @@ public class AppDataManager implements DataManager{
 
 
     @Override
-    public String getCurrentPlace() {
-        return mDbHelper.getCurrentPlace();
-    }
-
-    @Override
     public void addAttraction(String name, LocalDate date) {
         mDbHelper.addAttraction(name,date);
     }
 
 
     @Override
-    public void setQuantityDays(long quantityDays) {
-        mDbHelper.setQuantityDays(quantityDays);
-
-    }
-
-    @Override
-    public void setDateBeginTravel(LocalDate dateBeginTravel) {
-        mDbHelper.setDateBeginTravel(dateBeginTravel);
-    }
-
-    @Override
-    public void setDateEndTravel(LocalDate dateEndTravel) {
-        mDbHelper.setDateEndTravel(dateEndTravel);
-    }
-
-    @Override
     public void onConfirmItinerary(String currentPlace) {
         mDbHelper.onConfirmItinerary(currentPlace);
     }
 
+    @Override
+    public void createItinerary(String place, int quantityDays, LocalDate dateBeginTravel,
+                                LocalDate dateEndTravel, List<Day> days) {
+        mDbHelper.createItinerary(place,quantityDays,dateBeginTravel,dateEndTravel,days);
+    }
 }

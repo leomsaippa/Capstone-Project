@@ -6,7 +6,6 @@ import com.travelguide.utils.rx.SchedulerProvider;
 
 import org.joda.time.LocalDate;
 
-import java.text.DateFormat;
 
 import javax.inject.Inject;
 
@@ -23,5 +22,6 @@ public class AttractionDetailPresenter<V extends AttractionDetailMvpView> extend
     @Override
     public void addAttraction(String name, LocalDate date) {
         getDataManager().addAttraction(name, date);
+        //TODO provavelmente exibir um ok na tela e voltar pra tela de listar todas as atrações
     }
 }

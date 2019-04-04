@@ -54,6 +54,8 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
 
     @Override
     public void onBindViewHolder(@NonNull ItineraryAdapterViewHolder itineraryAdapterViewHolder, int position) {
+
+        //Todo mudar a forma de tratamento
         List<Day> list = itineraryList.get(position).getList_days();
         //Todo verificar null
         int numberAttractions = 0;

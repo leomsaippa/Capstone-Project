@@ -132,7 +132,6 @@ public class AttractionListFragment extends BaseFragment implements AttractionLi
 
     @Override
     public void onClick(PlaceResult searchPlaceResult) {
-        mPresenter.setCurrentPlace(searchPlaceResult.name);
         openAttractionDetailFragment(searchPlaceResult);
     }
 
