@@ -3,12 +3,12 @@ package com.travelguide.ui.fragments.searchPlace;
 import android.util.Log;
 
 import com.travelguide.data.DataManager;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.AppConstants;
 import com.travelguide.utils.CommonUtils;
 import com.travelguide.utils.rx.SchedulerProvider;
 
-import org.joda.time.DateTimeComparator;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
@@ -19,6 +19,8 @@ import io.reactivex.disposables.CompositeDisposable;
 public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePresenter<V>
         implements SearchPlaceMvpPresenter<V>  {
 
+    Itinerary itinerary = null;
+
     public static final String TAG = SearchPlacePresenter.class.getSimpleName();
     @Inject
     public SearchPlacePresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
@@ -26,7 +28,8 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
     }
 
     @Override
-    public void onBtnSearchClick(final String place, LocalDate dateBeginTravel, LocalDate dateEndTravel) {
+    public Itinerary onBtnSearchClick(final String place, LocalDate dateBeginTravel, LocalDate dateEndTravel) {
+
 
         int quantityDays = Days.daysBetween(dateBeginTravel,dateEndTravel).getDays();
 
@@ -39,7 +42,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                 if (quantityDays<=0) {
                     getMvpView().onErrorInvalidDate();
                 } else {
-                    getDataManager().createItinerary(place,quantityDays,dateBeginTravel,
+                    itinerary = getDataManager().createItinerary(place,quantityDays,dateBeginTravel,
                             dateEndTravel, CommonUtils.createDays(quantityDays));
                     if (place == null || place.isEmpty()) {
                         getMvpView().onErrorEmptyPlace();
@@ -60,7 +63,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                                         }
                                         Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(0).formattedAddress);
                                         getMvpView().hideLoading();
-                                        getMvpView().openAttractionListFragment(placeResponse);
+                                        getMvpView().openAttractionListFragment(placeResponse, itinerary);
                                     }, throwable -> {
                                         if (!isViewAttached()) {
                                             return;
@@ -76,6 +79,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                 }
             }
         }
+        return itinerary;
     }
 
     @Override

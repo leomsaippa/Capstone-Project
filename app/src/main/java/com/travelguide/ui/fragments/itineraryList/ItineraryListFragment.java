@@ -101,7 +101,7 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
         });
 
 
-        mRecyclerView.addOnScrollListener(scrollListener);
+       // mRecyclerView.addOnScrollListener(scrollListener);
 
         return view;
 

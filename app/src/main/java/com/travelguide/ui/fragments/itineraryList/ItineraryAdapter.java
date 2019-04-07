@@ -55,16 +55,22 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
     @Override
     public void onBindViewHolder(@NonNull ItineraryAdapterViewHolder itineraryAdapterViewHolder, int position) {
 
-        //Todo mudar a forma de tratamento
         List<Day> list = itineraryList.get(position).getList_days();
+
+        Log.d(TAG,"id "+itineraryList.get(position).getId());
         //Todo verificar null
         int numberAttractions = 0;
         for(int i=0;i<list.size();i++){
-            numberAttractions+=list.get(0).getSelected_attractions();
+            if(list.get(i) !=null)
+                if(list.get(i).getAttractions()!=null){
+                    numberAttractions+=list.get(i).getAttractions().size();
+                }else{
+                    Log.e(TAG,"There's no attractions in day " + i +1);
+                }
         }
         //todo get days
         itineraryAdapterViewHolder.bind(itineraryList.get(position).getName(),
-                "20/11 a 26/11",
+                itineraryList.get(position).getDayBegin().toString() + " a " +itineraryList.get(position).getDayEnd(),
                 "",
                 //itineraryList.get(position).getPhotos().get(0),
                 String.valueOf(itineraryList.get(position).getNumber_days()),
@@ -126,7 +132,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             mTvDays.setText(days);
             mTvAttractions.setText(quantity);
 
-            Picasso.get().load(poster_path).into(mIvAttraction);
+//            Picasso.get().load(poster_path).into(mIvAttraction);
 
         }
     }

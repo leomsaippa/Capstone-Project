@@ -7,6 +7,7 @@ import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
 import com.travelguide.data.network.model.Day;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.data.prefs.PreferencesHelper;
 
@@ -73,8 +74,13 @@ public class AppDataManager implements DataManager{
     }
 
     @Override
-    public void createItinerary(String place, int quantityDays, LocalDate dateBeginTravel,
-                                LocalDate dateEndTravel, List<Day> days) {
-        mDbHelper.createItinerary(place,quantityDays,dateBeginTravel,dateEndTravel,days);
+    public Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel,
+                                     LocalDate dateEndTravel, List<Day> days) {
+        return mDbHelper.createItinerary(place,quantityDays,dateBeginTravel,dateEndTravel,days);
+    }
+
+    @Override
+    public void updateItinerary(Itinerary itinerary) {
+        mDbHelper.updateItinerary(itinerary);
     }
 }

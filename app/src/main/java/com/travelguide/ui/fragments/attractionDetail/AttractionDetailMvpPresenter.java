@@ -1,10 +1,13 @@
 package com.travelguide.ui.fragments.attractionDetail;
 
+import com.travelguide.data.network.model.Day;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.ui.base.MvpPresenter;
 
-import org.joda.time.LocalDate;
+
+import java.util.List;
 
 public interface AttractionDetailMvpPresenter<V extends AttractionDetailMvpView> extends MvpPresenter<V> {
 
-    void addAttraction(String name, LocalDate date);
+    void updateItinerary(Itinerary itinerary);
 }

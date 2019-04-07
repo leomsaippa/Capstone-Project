@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.travelguide.R;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.PlaceResult;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
@@ -19,12 +20,13 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
-import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -37,8 +39,11 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
     public static final String TAG = AttractionDetailFragment.class.getSimpleName();
 
     private static final String PARAM_SEARCH_RESULT = "SEARCH_RESULT";
+    private static final String PARAM_ITINERARY = "PARAM_ITINERARY";
 
     PlaceResult searchPlaceResult;
+
+    Itinerary itinerary;
 
     @BindView(R.id.tv_ratingAttraction)
     TextView mRating;
@@ -49,9 +54,10 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
     @Inject
     AttractionDetailMvpPresenter<AttractionDetailMvpView> mPresenter;
 
-    public static AttractionDetailFragment getInstance(PlaceResult searchPlaceResult) {
+    public static AttractionDetailFragment getInstance(PlaceResult searchPlaceResult, Itinerary itinerary) {
         Bundle args = new Bundle();
         args.putParcelable(PARAM_SEARCH_RESULT, searchPlaceResult);
+        args.putParcelable(PARAM_ITINERARY, itinerary);
         AttractionDetailFragment attractionDetailFragment = new AttractionDetailFragment();
         attractionDetailFragment.setArguments(args);
         return attractionDetailFragment;
@@ -63,6 +69,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         Bundle bundle = getArguments();
         if(bundle != null){
             searchPlaceResult = bundle.getParcelable(PARAM_SEARCH_RESULT);
+            itinerary = bundle.getParcelable(PARAM_ITINERARY);
         }else{
             Log.e(TAG,"Error on create");
         }
@@ -107,9 +114,24 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         DateTimeZone jodaDateTimeZone = DateTimeZone.forID(timeZone.getID());
         DateTime dateTime = new DateTime(calendar.getTimeInMillis(), jodaDateTimeZone);
 
+
         LocalDate localDate = dateTime.toLocalDate();
-        mPresenter.addAttraction(searchPlaceResult.name, localDate);
+
+        addAttraction(searchPlaceResult.name, localDate);
+
     }
 
+
+    private void addAttraction(String name,LocalDate date){
+            LocalDate dayBegin = itinerary.getDayBegin();
+            int quantityDays = Days.daysBetween(dayBegin, date).getDays();
+            List<String> attractions = itinerary.getList_days().get(quantityDays).getAttractions();
+            if(attractions == null){
+                attractions = new ArrayList<>();
+            }
+            attractions.add(name);
+            itinerary.getList_days().get(quantityDays).setAttractions(attractions);
+            mPresenter.updateItinerary(itinerary);
+    }
 
 }

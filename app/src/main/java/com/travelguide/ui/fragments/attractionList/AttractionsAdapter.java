@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.travelguide.R;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.PlaceResult;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
 
     private List<PlaceResult> searchPlaceResponseList;
 
+    private Itinerary itinerary;
 
     void setSearchPlaceResponseList(List<PlaceResult> placeResultList) {
         if(searchPlaceResponseList != null){
@@ -42,8 +44,12 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
         }
     }
 
+    public void setItinerary(Itinerary itinerary) {
+        this.itinerary = itinerary;
+    }
+
     public interface AttractionsAdapterOnClickHandler {
-        void onClick (PlaceResult searchPlaceResponse);
+        void onClick (PlaceResult searchPlaceResponse, Itinerary itinerary);
     }
 
     public AttractionsAdapter(AttractionsAdapterOnClickHandler mClickHandler) {
@@ -93,7 +99,7 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
         @Override
         public void onClick(View v) {
             Log.d(TAG,"onClick " + getAdapterPosition());
-            mClickHandler.onClick(searchPlaceResponseList.get((getAdapterPosition())));
+            mClickHandler.onClick(searchPlaceResponseList.get((getAdapterPosition())),itinerary);
         }
 
         void bind(String formattedAddress, String poster_path, Double rating) {

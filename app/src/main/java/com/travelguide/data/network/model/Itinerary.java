@@ -1,5 +1,6 @@
 package com.travelguide.data.network.model;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -44,6 +45,7 @@ public class Itinerary implements Parcelable {
 
     @SerializedName("list_days")
     @Expose
+    @ColumnInfo(name = "list_days")
     private List<Day> list_days;
 
 

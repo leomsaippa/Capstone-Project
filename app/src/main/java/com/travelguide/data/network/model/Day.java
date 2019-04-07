@@ -10,26 +10,15 @@ import java.util.List;
 
 public class Day implements Parcelable {
 
-    @SerializedName("selected_attractions")
-    @Expose
-    private Integer selected_attractions;
-
     @SerializedName("attractions")
     @Expose
     private List<String> attractions;
 
+    //Position day. For example (travel from April 1 to April 8. First day will have id 0
     private int id;
 
     public Day(int id){
         this.id = id;
-    }
-
-    public Integer getSelected_attractions() {
-        return selected_attractions;
-    }
-
-    public void setSelected_attractions(Integer selected_attractions) {
-        this.selected_attractions = selected_attractions;
     }
 
     public List<String> getAttractions() {
@@ -41,11 +30,6 @@ public class Day implements Parcelable {
     }
 
     protected Day(Parcel in) {
-        if (in.readByte() == 0) {
-            selected_attractions = null;
-        } else {
-            selected_attractions = in.readInt();
-        }
         attractions = in.createStringArrayList();
         id = in.readInt();
     }
@@ -73,12 +57,6 @@ public class Day implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (selected_attractions == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(selected_attractions);
-        }
         dest.writeStringList(attractions);
         dest.writeInt(id);
     }

@@ -1,10 +1,9 @@
 package com.travelguide.ui.fragments.attractionDetail;
 
 import com.travelguide.data.DataManager;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.rx.SchedulerProvider;
-
-import org.joda.time.LocalDate;
 
 
 import javax.inject.Inject;
@@ -19,9 +18,10 @@ public class AttractionDetailPresenter<V extends AttractionDetailMvpView> extend
         super(dataManager, schedulerProvider, compositeDisposable);
     }
 
+
     @Override
-    public void addAttraction(String name, LocalDate date) {
-        getDataManager().addAttraction(name, date);
-        //TODO provavelmente exibir um ok na tela e voltar pra tela de listar todas as atrações
+    public void updateItinerary(Itinerary itinerary) {
+    //Todo por um ok na tela
+        getDataManager().updateItinerary(itinerary);
     }
 }

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.travelguide.R;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
@@ -39,6 +40,9 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
     public static final String TAG = SearchPlaceFragment.class.getSimpleName();
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1 ;
+    private static final String PARAM_ITINERARY = "PARAM_ITINERARY";
+
+    Itinerary itinerary;
 
     @BindView(R.id.btn_search)
     Button mBtnSearch;
@@ -73,9 +77,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
         View view = inflater.inflate(R.layout.frag_search_place,container,false);
-
 
         getActivityComponent().inject(this);
 
@@ -94,7 +96,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @OnClick(R.id.btn_search)
     public void onClickBtnSearch(View view){
         mPlaceName.requestFocus();
-        mPresenter.onBtnSearchClick(mPlaceName.getText().toString(),dateBegin,dateEnd);
+        itinerary = mPresenter.onBtnSearchClick(mPlaceName.getText().toString(),dateBegin,dateEnd);
 
     }
 
@@ -163,10 +165,10 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     }
 
     @Override
-    public void openAttractionListFragment(SearchPlaceResponse placeResponse) {
+    public void openAttractionListFragment(SearchPlaceResponse placeResponse, Itinerary itinerary) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_main, AttractionListFragment.getInstance(placeResponse), AttractionListFragment.TAG)
+                .replace(R.id.content_main, AttractionListFragment.getInstance(placeResponse, itinerary), AttractionListFragment.TAG)
                 .commit();
     }
 }

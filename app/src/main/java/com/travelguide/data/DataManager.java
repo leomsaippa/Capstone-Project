@@ -4,11 +4,11 @@ import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
 import com.travelguide.data.network.model.Day;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.prefs.PreferencesHelper;
 
 import org.joda.time.LocalDate;
 
-import java.text.DateFormat;
 import java.util.List;
 
 public interface DataManager extends DbHelper, StringHelper, ApiHelper, PreferencesHelper {
@@ -21,5 +21,7 @@ public interface DataManager extends DbHelper, StringHelper, ApiHelper, Preferen
 
     void onConfirmItinerary(String currentPlace);
 
-    void createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days);
+    Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days);
+
+    void updateItinerary(Itinerary itinerary);
 }
