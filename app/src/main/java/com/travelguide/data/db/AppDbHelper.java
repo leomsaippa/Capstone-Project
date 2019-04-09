@@ -9,7 +9,6 @@ import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.di.ApplicationContext;
 import com.travelguide.utils.AppExecutors;
 
-import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
 import java.util.List;
@@ -24,8 +23,6 @@ public class AppDbHelper implements DbHelper {
 
     private final Context mContext;
 
-    private Itinerary currentItinerary;
-
     private long currentId = -1;
 
     ItineraryDbHelper itineraryDbHelper;
@@ -34,25 +31,6 @@ public class AppDbHelper implements DbHelper {
     public AppDbHelper(@ApplicationContext Context context){
         this.mContext = context;
         itineraryDbHelper = ItineraryDbHelper.getInstance(mContext);
-    }
-
-    @Override
-    public void addAttraction(String name, LocalDate date) {
-        final LiveData<Itinerary> itinerary = itineraryDbHelper.itineraryDao().getItinerary(currentItinerary.getId());
-
-        if(itinerary.getValue() !=null){
-            LocalDate dayBegin = itinerary.getValue().getDayBegin();
-            int quantityDays = Days.daysBetween(dayBegin, date).getDays();
-            List<String> attractions = itinerary.getValue().getList_days().get(quantityDays).getAttractions();
-            attractions.add(name);
-            itinerary.getValue().getList_days().get(quantityDays).setAttractions(attractions);
-
-        }
-    }
-
-    @Override
-    public void onConfirmItinerary(String place) {
-
     }
 
     @Override

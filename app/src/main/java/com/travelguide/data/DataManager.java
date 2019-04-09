@@ -17,10 +17,6 @@ public interface DataManager extends DbHelper, StringHelper, ApiHelper, Preferen
 
     String generateQuery(String place);
 
-    void addAttraction(String name, LocalDate date);
-
-    void onConfirmItinerary(String currentPlace);
-
     Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days);
 
     void updateItinerary(Itinerary itinerary);

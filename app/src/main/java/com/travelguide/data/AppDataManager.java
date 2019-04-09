@@ -63,17 +63,6 @@ public class AppDataManager implements DataManager{
 
 
     @Override
-    public void addAttraction(String name, LocalDate date) {
-        mDbHelper.addAttraction(name,date);
-    }
-
-
-    @Override
-    public void onConfirmItinerary(String currentPlace) {
-        mDbHelper.onConfirmItinerary(currentPlace);
-    }
-
-    @Override
     public Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel,
                                      LocalDate dateEndTravel, List<Day> days) {
         return mDbHelper.createItinerary(place,quantityDays,dateBeginTravel,dateEndTravel,days);
