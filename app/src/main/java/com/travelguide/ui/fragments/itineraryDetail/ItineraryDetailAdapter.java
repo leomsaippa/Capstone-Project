@@ -1,4 +1,4 @@
-package com.travelguide.ui.fragments.attractionDetail;
+package com.travelguide.ui.fragments.itineraryDetail;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -59,7 +59,6 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
 
     @Override
     public void onBindViewHolder(@NonNull ItineraryDetailAdapterViewHolder holder, int position) {
-        Day day = dayList.get(position);
         holder.bind(dayList.get(position).getAttractions());
     }
 
@@ -90,8 +89,12 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
         }
 
         public void bind(List<String> attractions) {
-            String day = "Dia " + getAdapterPosition() + 1;
-            String attractionsText = attractions.get(getAdapterPosition()) + " atrações selecionadas";
+            String attractionsText = "0 atrações selecionadas ";
+            if(attractions !=null){
+                attractionsText = attractions.size() + " atrações selecionadas";
+            }
+            int pos = getAdapterPosition() + 1;
+            String day = "Dia " + pos;
             mTvDay.setText(day);
             mTvAttractions.setText(attractionsText);
         }
