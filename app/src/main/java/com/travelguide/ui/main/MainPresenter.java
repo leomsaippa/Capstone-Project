@@ -20,7 +20,6 @@ public class MainPresenter<V extends MainMvpView> extends BasePresenter<V>
 
     @Override
     public void onConfirmItinerary() {
-        getDataManager().onConfirmItinerary(getDataManager().getCurrentPlace());
         getMvpView().showItineraryListFragment();
     }
 }

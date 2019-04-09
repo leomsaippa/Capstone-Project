@@ -1,6 +1,7 @@
 package com.travelguide.data.network.model;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 public class Travel {
@@ -10,8 +11,8 @@ public class Travel {
 
     long quantityDays = 0;
 
-    Date dateBegin;
-    Date dateEnd;
+    LocalDate dateBegin;
+    LocalDate dateEnd;
 
     List<Day> days;
 
@@ -45,19 +46,19 @@ public class Travel {
         this.quantityDays = quantityDays;
     }
 
-    public Date getDateBegin() {
+    public LocalDate getDateBegin() {
         return dateBegin;
     }
 
-    public void setDateBegin(Date dateBegin) {
+    public void setDateBegin(LocalDate dateBegin) {
         this.dateBegin = dateBegin;
     }
 
-    public Date getDateEnd() {
+    public LocalDate getDateEnd() {
         return dateEnd;
     }
 
-    public void setDateEnd(Date dateEnd) {
+    public void setDateEnd(LocalDate dateEnd) {
         this.dateEnd = dateEnd;
     }
 

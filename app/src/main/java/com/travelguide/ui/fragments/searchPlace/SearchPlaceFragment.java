@@ -3,6 +3,7 @@ package com.travelguide.ui.fragments.searchPlace;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.travelguide.R;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -31,6 +40,9 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
     public static final String TAG = SearchPlaceFragment.class.getSimpleName();
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1 ;
+    private static final String PARAM_ITINERARY = "PARAM_ITINERARY";
+
+    Itinerary itinerary;
 
     @BindView(R.id.btn_search)
     Button mBtnSearch;
@@ -45,8 +57,8 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     EditText mPlaceName;
 
     boolean beginCall = false;
-    Date dateBegin;
-    Date dateEnd;
+    LocalDate dateBegin;
+    LocalDate dateEnd;
 
     @Inject
     SearchPlaceMvpPresenter<SearchPlaceMvpView> mPresenter;
@@ -67,12 +79,13 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
         View view = inflater.inflate(R.layout.frag_search_place,container,false);
 
-
         getActivityComponent().inject(this);
 
         setUnBinder(ButterKnife.bind(this, view));
 
         mPresenter.onAttach(this);
+
+        JodaTimeAndroid.init(getContext());
 
         mPresenter.setApiEndPoint();
 
@@ -83,7 +96,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @OnClick(R.id.btn_search)
     public void onClickBtnSearch(View view){
         mPlaceName.requestFocus();
-        mPresenter.onBtnSearchClick(mPlaceName.getText().toString(),dateBegin,dateEnd);
+        itinerary = mPresenter.onBtnSearchClick(mPlaceName.getText().toString(),dateBegin,dateEnd);
 
     }
 
@@ -108,15 +121,19 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @Override
     public void onSelectedDate(int year, int month, int dayOfMonth) {
         Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-        //TODO adicionar logica para verificar se a data de volta é menor que a de ida
-        Date date = calendar.getTime();
+        TimeZone timeZone = calendar.getTimeZone();
+        DateTimeZone jodaDateTimeZone = DateTimeZone.forID(timeZone.getID());
+        DateTime dateTime = new DateTime(calendar.getTimeInMillis(), jodaDateTimeZone);
+
+        LocalDate localDate = dateTime.toLocalDate();
+
         if(beginCall){
-            dateBegin = date;
-            mTextBeginTravel.setText(date.toString());
+            dateBegin = localDate;
+            mTextBeginTravel.setText(localDate.toString());
             beginCall = false;
         }else{
-            dateEnd = date;
-            mTextEndTravel.setText(date.toString());
+            dateEnd = localDate;
+            mTextEndTravel.setText(localDate.toString());
             beginCall = true;
         }
 
@@ -148,10 +165,10 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     }
 
     @Override
-    public void openAttractionListFragment(SearchPlaceResponse placeResponse) {
+    public void openAttractionListFragment(SearchPlaceResponse placeResponse, Itinerary itinerary) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_main, AttractionListFragment.getInstance(placeResponse), AttractionListFragment.TAG)
+                .replace(R.id.content_main, AttractionListFragment.getInstance(placeResponse, itinerary), AttractionListFragment.TAG)
                 .commit();
     }
 }

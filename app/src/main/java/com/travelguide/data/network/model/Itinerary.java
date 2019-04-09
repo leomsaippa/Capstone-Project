@@ -1,5 +1,6 @@
 package com.travelguide.data.network.model;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -10,11 +11,15 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.travelguide.data.db.DateConverter;
+import com.travelguide.data.db.LocalDateConverter;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.List;
 
 @Entity(tableName = "itinerary")
-@TypeConverters(DateConverter.class)
+@TypeConverters({DateConverter.class, LocalDateConverter.class})
 public class Itinerary implements Parcelable {
 
     @SerializedName("id")
@@ -29,38 +34,28 @@ public class Itinerary implements Parcelable {
     @SerializedName("number_days")
     @Expose
     private Integer number_days;
+
+    @SerializedName("day_begin")
+    @Expose
+    private LocalDate dayBegin;
+
+    @SerializedName("day_end")
+    @Expose
+    private LocalDate dayEnd;
+
     @SerializedName("list_days")
     @Expose
+    @ColumnInfo(name = "list_days")
     private List<Day> list_days;
 
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        if (id == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(id);
-        }
-        dest.writeString(name);
-        if (number_days == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(number_days);
-        }
-        dest.writeTypedList(list_days);
-    }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public Itinerary(Integer id, String name, Integer number_days, List<Day> list_days) {
-        this.id = id;
+    public Itinerary(String name, Integer number_days, LocalDate dayBegin, LocalDate dayEnd,
+                     List<Day> list_days) {
         this.name = name;
         this.number_days=number_days;
+        this.dayBegin = dayBegin;
+        this.dayEnd = dayEnd;
         this.list_days=list_days;
     }
 
@@ -115,5 +110,31 @@ public class Itinerary implements Parcelable {
 
     public void setList_days(List<Day> list_days) {
         this.list_days = list_days;
+    }
+
+    public LocalDate getDayBegin() {
+        return dayBegin;
+    }
+
+    public void setDayBegin(LocalDate dayBegin) {
+        this.dayBegin = dayBegin;
+    }
+
+    public LocalDate getDayEnd() {
+        return dayEnd;
+    }
+
+    public void setDayEnd(LocalDate dayEnd) {
+        this.dayEnd = dayEnd;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

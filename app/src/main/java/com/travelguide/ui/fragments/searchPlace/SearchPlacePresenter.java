@@ -3,11 +3,14 @@ package com.travelguide.ui.fragments.searchPlace;
 import android.util.Log;
 
 import com.travelguide.data.DataManager;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.AppConstants;
+import com.travelguide.utils.CommonUtils;
 import com.travelguide.utils.rx.SchedulerProvider;
 
-import java.util.Date;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 import javax.inject.Inject;
 
@@ -16,6 +19,8 @@ import io.reactivex.disposables.CompositeDisposable;
 public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePresenter<V>
         implements SearchPlaceMvpPresenter<V>  {
 
+    Itinerary itinerary = null;
+
     public static final String TAG = SearchPlacePresenter.class.getSimpleName();
     @Inject
     public SearchPlacePresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
@@ -23,20 +28,22 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
     }
 
     @Override
-    public void onBtnSearchClick(final String place, Date dateBeginTravel, Date dateEndTravel) {
+    public Itinerary onBtnSearchClick(final String place, LocalDate dateBeginTravel, LocalDate dateEndTravel) {
+
+
+        int quantityDays = Days.daysBetween(dateBeginTravel,dateEndTravel).getDays();
+
         if (dateBeginTravel == null || dateBeginTravel.toString().isEmpty()){
             getMvpView().onErrorEmptyBeginTravel();
         }else {
             if (dateEndTravel == null || dateEndTravel.toString().isEmpty()) {
                 getMvpView().onErrorEmptyEndTravel();
             } else {
-                if (dateEndTravel.before(dateBeginTravel)) {
+                if (quantityDays<=0) {
                     getMvpView().onErrorInvalidDate();
                 } else {
-                    long quantityDays = dateEndTravel.getTime() - dateBeginTravel.getTime();
-                    getDataManager().setQuantityDays(quantityDays);
-                    getDataManager().setDateBeginTravel(dateBeginTravel);
-                    getDataManager().setDateEndTravel(dateEndTravel);
+                    itinerary = getDataManager().createItinerary(place,quantityDays,dateBeginTravel,
+                            dateEndTravel, CommonUtils.createDays(quantityDays));
                     if (place == null || place.isEmpty()) {
                         getMvpView().onErrorEmptyPlace();
                     } else {
@@ -56,7 +63,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                                         }
                                         Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(0).formattedAddress);
                                         getMvpView().hideLoading();
-                                        getMvpView().openAttractionListFragment(placeResponse);
+                                        getMvpView().openAttractionListFragment(placeResponse, itinerary);
                                     }, throwable -> {
                                         if (!isViewAttached()) {
                                             return;
@@ -72,6 +79,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                 }
             }
         }
+        return itinerary;
     }
 
     @Override

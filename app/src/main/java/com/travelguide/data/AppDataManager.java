@@ -6,10 +6,14 @@ import javax.inject.Inject;
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
+import com.travelguide.data.network.model.Day;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.data.prefs.PreferencesHelper;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -43,11 +47,6 @@ public class AppDataManager implements DataManager{
 
 
     @Override
-    public void setCurrentPlace(String place) {
-        mDbHelper.setCurrentPlace(place);
-    }
-
-    @Override
     public void apiSetEndPoint(String endpoint) {
         mApiHelper.apiSetEndPoint(endpoint);
     }
@@ -64,35 +63,13 @@ public class AppDataManager implements DataManager{
 
 
     @Override
-    public String getCurrentPlace() {
-        return mDbHelper.getCurrentPlace();
+    public Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel,
+                                     LocalDate dateEndTravel, List<Day> days) {
+        return mDbHelper.createItinerary(place,quantityDays,dateBeginTravel,dateEndTravel,days);
     }
 
     @Override
-    public void addAttraction(String name, Date date) {
-        mDbHelper.addAttraction(name,date);
+    public void updateItinerary(Itinerary itinerary) {
+        mDbHelper.updateItinerary(itinerary);
     }
-
-
-    @Override
-    public void setQuantityDays(long quantityDays) {
-        mDbHelper.setQuantityDays(quantityDays);
-
-    }
-
-    @Override
-    public void setDateBeginTravel(Date dateBeginTravel) {
-        mDbHelper.setDateBeginTravel(dateBeginTravel);
-    }
-
-    @Override
-    public void setDateEndTravel(Date dateEndTravel) {
-        mDbHelper.setDateEndTravel(dateEndTravel);
-    }
-
-    @Override
-    public void onConfirmItinerary(String currentPlace) {
-        mDbHelper.onConfirmItinerary(currentPlace);
-    }
-
 }

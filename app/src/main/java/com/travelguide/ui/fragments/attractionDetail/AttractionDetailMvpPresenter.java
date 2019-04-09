@@ -1,9 +1,13 @@
 package com.travelguide.ui.fragments.attractionDetail;
 
+import com.travelguide.data.network.model.Day;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.ui.base.MvpPresenter;
 
-import java.util.Date;
+
+import java.util.List;
 
 public interface AttractionDetailMvpPresenter<V extends AttractionDetailMvpView> extends MvpPresenter<V> {
-    void addAttraction(String name, Date date);
+
+    void updateItinerary(Itinerary itinerary);
 }

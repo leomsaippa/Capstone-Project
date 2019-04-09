@@ -6,7 +6,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
 import com.travelguide.R;
+import com.travelguide.data.network.model.Day;
 import com.travelguide.ui.base.BaseActivity;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.travelguide.utils.AppConstants.API_QUERY;
 
@@ -37,5 +42,14 @@ public class CommonUtils {
     public static String mountCityQuery(String place) {
         place = place.replace(" ", "+");
         return API_QUERY + place;
+    }
+
+    public static List<Day> createDays(int quantityDays){
+        List<Day> days = new ArrayList<>();
+        for(int i=0;i<quantityDays;i++){
+            Day day = new Day(i);
+            days.add(day);
+        }
+        return days;
     }
 }

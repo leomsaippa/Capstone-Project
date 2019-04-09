@@ -1,10 +1,10 @@
 package com.travelguide.ui.fragments.attractionDetail;
 
 import com.travelguide.data.DataManager;
+import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.ui.base.BasePresenter;
 import com.travelguide.utils.rx.SchedulerProvider;
 
-import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -18,8 +18,10 @@ public class AttractionDetailPresenter<V extends AttractionDetailMvpView> extend
         super(dataManager, schedulerProvider, compositeDisposable);
     }
 
+
     @Override
-    public void addAttraction(String name, Date date) {
-        getDataManager().addAttraction(name, date);
+    public void updateItinerary(Itinerary itinerary) {
+    //Todo por um ok na tela
+        getDataManager().updateItinerary(itinerary);
     }
 }

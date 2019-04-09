@@ -21,9 +21,4 @@ public class AttractionListPresenter<V extends AttractionListMvpView> extends Ba
     public void onBtnLoadAttractionsClick() {
         //todo adicionar logica para pegar mais lugares
     }
-
-    @Override
-    public void setCurrentPlace(String place) {
-        getDataManager().setCurrentPlace(place);
-    }
 }
