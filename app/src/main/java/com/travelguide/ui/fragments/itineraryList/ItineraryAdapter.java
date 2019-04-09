@@ -132,6 +132,13 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             mTvDays.setText(days);
             mTvAttractions.setText(quantity);
 
+            mBtnSeeDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickHandler.onCLick(itineraryList.get((getAdapterPosition())));
+                }
+            });
+
 //            Picasso.get().load(poster_path).into(mIvAttraction);
 
         }
