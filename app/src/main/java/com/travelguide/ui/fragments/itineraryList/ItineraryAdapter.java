@@ -61,9 +61,12 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
         //Todo verificar null
         int numberAttractions = 0;
         for(int i=0;i<list.size();i++){
+            Log.d(TAG, "list na position " + i);
             if(list.get(i) !=null)
-                if(list.get(i).getAttractions()!=null){
+                Log.d(TAG, "Lista not null");
+            if(list.get(i).getAttractions()!=null){
                     numberAttractions+=list.get(i).getAttractions().size();
+                    Log.d(TAG, "Adicionando numero de atrações " + numberAttractions);
                 }else{
                     Log.e(TAG,"There's no attractions in day " + i +1);
                 }

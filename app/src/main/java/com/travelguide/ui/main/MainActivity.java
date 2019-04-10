@@ -24,11 +24,11 @@ import butterknife.OnClick;
 import com.travelguide.R;
 import com.travelguide.ui.base.BaseActivity;
 import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
+import com.travelguide.ui.fragments.dayRoute.DayRouteFragment;
+import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
 import com.travelguide.ui.fragments.itineraryList.ItineraryListFragment;
 import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class MainActivity extends BaseActivity implements MainMvpView, NavigationView.OnNavigationItemSelectedListener {
 
@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
     public void showItineraryListFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_main, ItineraryListFragment.getInstance(), SearchPlaceFragment.TAG)
+                .replace(R.id.content_main, ItineraryListFragment.getInstance(), ItineraryListFragment.TAG)
                 .commit();
     }
 
@@ -158,6 +158,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         if(currentFragment != null)
         {
             currentFragment.showCalendar();
+        }else{
+            ItineraryDayFragment fragment = (ItineraryDayFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDayFragment.TAG);
+            if(fragment != null){
+                fragment.showMap();
+            }
+
         }
     }
 }

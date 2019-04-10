@@ -131,6 +131,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
             }
             attractions.add(name);
             itinerary.getList_days().get(quantityDays).setAttractions(attractions);
+            Log.d(TAG,"Adding to itinerary " + itinerary.getList_days().get(quantityDays).getAttractions());
             mPresenter.updateItinerary(itinerary);
     }
 

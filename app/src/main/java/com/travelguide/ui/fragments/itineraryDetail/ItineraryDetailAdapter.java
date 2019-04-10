@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travelguide.R;
 import com.travelguide.data.network.model.Day;
@@ -85,7 +86,12 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
         @Override
         public void onClick(View v) {
             Log.d(TAG,"onClick " + getAdapterPosition());
-            mClickHandler.onClick(dayList.get((getAdapterPosition())));
+            if(dayList.get(getAdapterPosition()) != null){
+
+                mClickHandler.onClick(dayList.get((getAdapterPosition())));
+            }else{
+                Log.e(TAG,"You cant click in a day without attractions");
+            }
         }
 
         public void bind(List<String> attractions) {
