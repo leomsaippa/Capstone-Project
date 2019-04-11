@@ -11,6 +11,7 @@ import com.travelguide.utils.AppExecutors;
 
 import org.joda.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,8 +42,8 @@ public class AppDbHelper implements DbHelper {
             @Override
             public void run() {
 
-                Log.d(TAG, "Current id " +itinerary.getId());
                 currentId = itineraryDbHelper.itineraryDao().insertItinerary(itinerary);
+                Log.d(TAG, "Current id " +itinerary.getId());
 
             }
         });
@@ -64,6 +65,7 @@ public class AppDbHelper implements DbHelper {
 
                 Log.d(TAG, "Current id " +itinerary.getId());
                 itineraryDbHelper.itineraryDao().update(itinerary);
+                Log.d(TAG,"Itinerary update successfully ");
 
             }
         });

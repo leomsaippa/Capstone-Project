@@ -6,7 +6,7 @@ import com.travelguide.R;
 import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.ui.base.BaseFragment;
-import com.travelguide.ui.fragments.attractionDetail.ItineraryDetailAdapter;
+import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -115,5 +116,14 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
 
     @Override
     public void onClick(Day day) {
+        Toast.makeText(getContext(), "Day " + day.getAttractions().toString(), Toast.LENGTH_SHORT).show();
+        openItineraryDayFragment(day);
+    }
+
+    private void openItineraryDayFragment(Day day) {
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_main, ItineraryDayFragment.getInstance(day), ItineraryDayFragment.TAG)
+                .commit();
     }
 }

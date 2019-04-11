@@ -109,6 +109,11 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
 
     private void loadItineraries() {
         itinerariesViewModel.getItineraries().observe(this, itineraries -> {
+            if(itineraries!=null) {
+                for (int i = 0; i < itineraries.size(); i++) {
+                    Log.d(TAG, "Day "+ i + " lista " + itineraries.get(i).getList_days());
+                }
+            }
             mAdapter.clear();
             mAdapter.notifyDataSetChanged();
             mAdapter.setItineraryList(itineraries);

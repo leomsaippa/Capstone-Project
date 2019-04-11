@@ -1,4 +1,4 @@
-package com.travelguide.ui.fragments.attractionDetail;
+package com.travelguide.ui.fragments.itineraryDetail;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travelguide.R;
 import com.travelguide.data.network.model.Day;
@@ -59,7 +60,6 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
 
     @Override
     public void onBindViewHolder(@NonNull ItineraryDetailAdapterViewHolder holder, int position) {
-        Day day = dayList.get(position);
         holder.bind(dayList.get(position).getAttractions());
     }
 
@@ -86,12 +86,21 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
         @Override
         public void onClick(View v) {
             Log.d(TAG,"onClick " + getAdapterPosition());
-            mClickHandler.onClick(dayList.get((getAdapterPosition())));
+            if(dayList.get(getAdapterPosition()) != null){
+
+                mClickHandler.onClick(dayList.get((getAdapterPosition())));
+            }else{
+                Log.e(TAG,"You cant click in a day without attractions");
+            }
         }
 
         public void bind(List<String> attractions) {
-            String day = "Dia " + getAdapterPosition() + 1;
-            String attractionsText = attractions.get(getAdapterPosition()) + " atrações selecionadas";
+            String attractionsText = "0 atrações selecionadas ";
+            if(attractions !=null){
+                attractionsText = attractions.size() + " atrações selecionadas";
+            }
+            int pos = getAdapterPosition() + 1;
+            String day = "Dia " + pos;
             mTvDay.setText(day);
             mTvAttractions.setText(attractionsText);
         }
