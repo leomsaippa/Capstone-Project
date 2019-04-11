@@ -136,7 +136,7 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
             @Override
             public void onChanged(@Nullable Itinerary it) {
                 itinerary.removeObserver(this);
-                Log.d(TAG, "CheckFavorite " + it.getName());
+                Log.d(TAG, "Load itinerary " + it.getName());
 
             }
         });
