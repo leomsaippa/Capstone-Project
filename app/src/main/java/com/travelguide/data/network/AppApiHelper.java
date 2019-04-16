@@ -29,6 +29,7 @@ public class AppApiHelper implements ApiHelper {
     public Observable<SearchPlaceResponse> apiGetPlaces(String query) {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         Log.d(TAG,"Query: " + baseUrl + query);

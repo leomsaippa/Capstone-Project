@@ -75,6 +75,7 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
         Bundle bundle = getArguments();
         if(bundle != null){
             mSearchPlaceResponseList = bundle.getParcelable(PARAM_SEARCH_RESPONSE);
+            Log.d(TAG,"TESTE LELEO " + mSearchPlaceResponseList.getPlaceResult().get(0).getPhotos().toArray().toString());
             itinerary = bundle.getParcelable(PARAM_ITINERARY);
         }else{
             Log.e(TAG,"Error on create");

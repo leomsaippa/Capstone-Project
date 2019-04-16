@@ -62,6 +62,9 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                                             return;
                                         }
                                         Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(0).formattedAddress);
+                                     /*   Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(1).formattedAddress);
+                                        Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(2).formattedAddress);
+                                     */   Log.d(TAG, "Place Response aa " + placeResponse.getPlaceResult().toArray().toString());
                                         getMvpView().hideLoading();
                                         getMvpView().openAttractionListFragment(placeResponse, itinerary);
                                     }, throwable -> {
