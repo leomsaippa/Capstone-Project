@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AttractionListFragment extends BaseFragment implements AttractionListMvpView, AttractionsAdapter.AttractionsAdapterOnClickHandler{
+public class  AttractionListFragment extends BaseFragment implements AttractionListMvpView, AttractionsAdapter.AttractionsAdapterOnClickHandler{
 
     public static final String TAG = AttractionListFragment.class.getSimpleName();
     private static final String PARAM_SEARCH_RESPONSE = "SEARCH_RESPONSE_LIST";
