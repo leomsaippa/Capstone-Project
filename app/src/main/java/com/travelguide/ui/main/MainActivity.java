@@ -117,22 +117,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         if (id == R.id.nav_camera) {
             mPresenter.onConfirmItinerary();
         } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
-
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    private void showSearchPlaceFragment() {
+    private void showSearchPlaceFragment () {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_main, SearchPlaceFragment.getInstance(), SearchPlaceFragment.TAG)
@@ -140,27 +130,26 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
     }
 
     @Override
-    public void showItineraryListFragment() {
+    public void showItineraryListFragment () {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_main, ItineraryListFragment.getInstance(), ItineraryListFragment.TAG)
                 .commit();
     }
 
-    public void showFAB(){
+    public void showFAB () {
         mFab.show();
     }
 
 
     @OnClick(R.id.fab)
-    public void onFabClick(View view){
+    public void onFabClick (View view){
         AttractionDetailFragment currentFragment = (AttractionDetailFragment) getSupportFragmentManager().findFragmentByTag(AttractionDetailFragment.TAG);
-        if(currentFragment != null)
-        {
+        if (currentFragment != null) {
             currentFragment.showCalendar();
-        }else{
+        } else {
             ItineraryDayFragment fragment = (ItineraryDayFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDayFragment.TAG);
-            if(fragment != null){
+            if (fragment != null) {
                 fragment.showMap();
             }
 

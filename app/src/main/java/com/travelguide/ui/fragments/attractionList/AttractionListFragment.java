@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AttractionListFragment extends BaseFragment implements AttractionListMvpView, AttractionsAdapter.AttractionsAdapterOnClickHandler{
+public class  AttractionListFragment extends BaseFragment implements AttractionListMvpView, AttractionsAdapter.AttractionsAdapterOnClickHandler{
 
     public static final String TAG = AttractionListFragment.class.getSimpleName();
     private static final String PARAM_SEARCH_RESPONSE = "SEARCH_RESPONSE_LIST";
@@ -75,6 +75,7 @@ public class AttractionListFragment extends BaseFragment implements AttractionLi
         Bundle bundle = getArguments();
         if(bundle != null){
             mSearchPlaceResponseList = bundle.getParcelable(PARAM_SEARCH_RESPONSE);
+            Log.d(TAG,"TESTE LELEO " + mSearchPlaceResponseList.getPlaceResult().get(0).getPhotos().toArray().toString());
             itinerary = bundle.getParcelable(PARAM_ITINERARY);
         }else{
             Log.e(TAG,"Error on create");
