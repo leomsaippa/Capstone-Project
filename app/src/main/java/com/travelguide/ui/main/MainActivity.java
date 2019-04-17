@@ -1,19 +1,16 @@
 package com.travelguide.ui.main;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -24,8 +21,8 @@ import butterknife.OnClick;
 import com.travelguide.R;
 import com.travelguide.ui.base.BaseActivity;
 import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
-import com.travelguide.ui.fragments.dayRoute.DayRouteFragment;
 import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
+import com.travelguide.ui.fragments.itineraryDetail.ItineraryDetailFragment;
 import com.travelguide.ui.fragments.itineraryList.ItineraryListFragment;
 import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
 
@@ -117,6 +114,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         if (id == R.id.nav_camera) {
             mPresenter.onConfirmItinerary();
         } else if (id == R.id.nav_gallery) {
+            ItineraryDetailFragment fragment = (ItineraryDetailFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDayFragment.TAG);
+            if (fragment != null) {
+                fragment.addWidget();
+            }else{
+                Toast.makeText(this, "You can't add widget. Go to your list day.", Toast.LENGTH_SHORT).show();
+            }
+
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;

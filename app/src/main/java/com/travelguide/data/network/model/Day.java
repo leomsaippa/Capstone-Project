@@ -15,6 +15,8 @@ public class Day implements Parcelable {
     private List<String> attractions;
 
     //Position day. For example (travel from April 1 to April 8. First day will have id 0
+    @SerializedName("attractions")
+    @Expose
     private int id;
 
     public Day(int id){
