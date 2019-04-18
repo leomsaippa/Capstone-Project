@@ -29,8 +29,7 @@ public class AppSharedPref implements SharedPref {
     @Override
     public void saveWidgetAttractions(List<Day> days) {
         String dayJson = gson.toJson(days);
-        sharedPreferences.getString(DAYS_PARAM,dayJson);
-        sharedPreferences.edit().putString(DAYS_PARAM, days.toString()).apply();
+        sharedPreferences.edit().putString(DAYS_PARAM, dayJson).apply();
     }
 
     @Override

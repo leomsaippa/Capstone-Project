@@ -70,6 +70,7 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG,"onCreate");
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if(bundle != null){

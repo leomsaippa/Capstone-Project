@@ -27,7 +27,7 @@ public class AttractionWidgetService extends RemoteViewsService {
         AppSharedPref appSharedPref;
 
         private List<Day> days;
-        private List<String> attractions;
+        private List<String> attractions = new ArrayList<>();
 
 
         Context mContext;
@@ -46,7 +46,11 @@ public class AttractionWidgetService extends RemoteViewsService {
             days = appSharedPref.loadWidgetAttraction();
             if(days!=null) {
                 for (int i = 0; i < days.size(); i++) {
-                    attractions.add(String.valueOf(days.get(i).getAttractions().size()));
+                    int size = 0;
+                    if(days.get(i).getAttractions() != null){
+                        size = days.get(i).getAttractions().size();
+                    }
+                    attractions.add(String.valueOf(size));
                 }
             }
         }
@@ -57,22 +61,25 @@ public class AttractionWidgetService extends RemoteViewsService {
 
         @Override
         public int getCount() {
-            if (days == null) return 0;
-            return days.size();
+            if (attractions == null) return 0;
+            return attractions.size();
         }
 
 
         @Override
         public RemoteViews getViewAt(int position) {
-            if (position == AdapterView.INVALID_POSITION || days == null ||
-                    days.isEmpty()) {
+            if (position == AdapterView.INVALID_POSITION || attractions == null ||
+                    attractions.isEmpty()) {
                 return null;
             }
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_recipe_attraction_item);
 
+
             String qtdWdiget = attractions.get(position);
 
-            views.setTextViewText(R.id.tv_attraction_qtd_widget, qtdWdiget);
+            String textWidget = "Dia " + String.valueOf(position+1) + " - "
+                    + qtdWdiget + "  atrações selecionadas";
+            views.setTextViewText(R.id.tv_attraction_qtd_widget, textWidget);
             views.setTextColor(R.id.tv_selected_widget, Color.WHITE);
 
             Intent fillIntent = new Intent();
