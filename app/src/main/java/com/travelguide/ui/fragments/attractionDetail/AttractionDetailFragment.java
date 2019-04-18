@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.travelguide.R;
 import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.PlaceResult;
+import com.travelguide.data.sharedPreferences.AppSharedPref;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 import com.travelguide.ui.main.MainActivity;
@@ -40,6 +41,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
 
     private static final String PARAM_SEARCH_RESULT = "SEARCH_RESULT";
     private static final String PARAM_ITINERARY = "PARAM_ITINERARY";
+
 
     PlaceResult searchPlaceResult;
 
@@ -73,6 +75,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         }else{
             Log.e(TAG,"Error on create");
         }
+
     }
 
     @Nullable

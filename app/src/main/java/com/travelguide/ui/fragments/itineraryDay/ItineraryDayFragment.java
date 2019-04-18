@@ -130,4 +130,6 @@ public class ItineraryDayFragment extends BaseFragment implements ItineraryDayMv
                 .replace(R.id.content_main, DayRouteFragment.getInstance((ArrayList<String>) attractions), DayRouteFragment.TAG)
                 .commit();
     }
+
+
 }

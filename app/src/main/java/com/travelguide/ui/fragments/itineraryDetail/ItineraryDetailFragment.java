@@ -5,8 +5,10 @@ import android.os.Bundle;
 import com.travelguide.R;
 import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.Itinerary;
+import com.travelguide.data.sharedPreferences.AppSharedPref;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
+import com.travelguide.ui.widget.AttractionWidgetProvider;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -52,6 +54,8 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
 
     GridLayoutManager layoutManager;
 
+    AppSharedPref appSharedPref;
+
 
     @Inject
     ItineraryDetailMvpPresenter<ItineraryDetailMvpView> mPresenter;
@@ -73,6 +77,7 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
         }else{
             Log.e(TAG,"Error on create");
         }
+        appSharedPref = new AppSharedPref(getActivity());
 
     }
 
@@ -125,5 +130,10 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
                 .beginTransaction()
                 .replace(R.id.content_main, ItineraryDayFragment.getInstance(day), ItineraryDayFragment.TAG)
                 .commit();
+    }
+
+    public void addWidget() {
+        appSharedPref.saveWidgetAttractions(itinerary.getList_days());
+        AttractionWidgetProvider.updateWidget(getActivity());
     }
 }
