@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            storeFile rootProject.file("../keys/capstoneKeystore.jks")
+            storePassword "capstone"
+            keyAlias "capstone"
+            keyPassword "capstone"
+        }
+    }
+
     compileOptions {
         targetCompatibility = "8"
         sourceCompatibility = "8"
@@ -19,6 +28,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
