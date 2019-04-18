@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         if (id == R.id.nav_camera) {
             mPresenter.onConfirmItinerary();
         } else if (id == R.id.nav_gallery) {
-            ItineraryDetailFragment fragment = (ItineraryDetailFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDayFragment.TAG);
+            ItineraryDetailFragment fragment = (ItineraryDetailFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDetailFragment.TAG);
             if (fragment != null) {
                 fragment.addWidget();
             }else{
