@@ -41,8 +41,13 @@ public class AppDataManager implements DataManager{
     }
 
     @Override
-    public String generateQuery(String place) {
-        return mStringHelper.generateQuery(place);
+    public String generateTextPlaceQuery(String place) {
+        return mStringHelper.generateTextPlaceQuery(place);
+    }
+
+    @Override
+    public String generatePhotoQuery(String photoReference) {
+        return mStringHelper.generatePhotoQuery(photoReference);
     }
 
 

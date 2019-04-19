@@ -9,6 +9,9 @@ import com.travelguide.di.ApplicationContext;
 import com.travelguide.utils.AppConstants;
 import com.travelguide.utils.CommonUtils;
 
+import static com.travelguide.utils.AppConstants.API_PHOTO;
+import static com.travelguide.utils.AppConstants.API_SENSOR;
+
 public class AppStringHelper implements StringHelper {
 
     private final Context mContext;
@@ -24,9 +27,14 @@ public class AppStringHelper implements StringHelper {
     }
 
     @Override
-    public String generateQuery(String place) {
+    public String generateTextPlaceQuery(String place) {
         String query = CommonUtils.mountCityQuery(place);
         return query + AppConstants.API_POINT_OF_INTEREST + mContext.getString(R.string.maps_apikey);
+    }
+
+    @Override
+    public String generatePhotoQuery(String photoReference) {
+        return API_PHOTO + photoReference + API_SENSOR + mContext.getString(R.string.maps_apikey);
     }
 
 

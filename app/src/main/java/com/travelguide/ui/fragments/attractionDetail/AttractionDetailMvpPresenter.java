@@ -10,4 +10,6 @@ import java.util.List;
 public interface AttractionDetailMvpPresenter<V extends AttractionDetailMvpView> extends MvpPresenter<V> {
 
     void updateItinerary(Itinerary itinerary);
+
+    String generatePhotoQuery(String photoReference);
 }

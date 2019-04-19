@@ -1,30 +1,45 @@
 package com.travelguide.ui.fragments.attractionDetail;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.travelguide.R;
 import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.PlaceResult;
-import com.travelguide.data.sharedPreferences.AppSharedPref;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.searchPlace.calendar.DatePickerFragment;
 import com.travelguide.ui.main.MainActivity;
+import com.travelguide.utils.AppConstants;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectHandler;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -52,6 +67,15 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
 
     @BindView(R.id.tv_nameAttraction)
     TextView mAttraction;
+
+    @BindView(R.id.tv_openedNow)
+    TextView mOpenedNow;
+
+    @BindView(R.id.tv_total_users)
+    TextView mTotalUser;
+
+    @BindView(R.id.iv_attraction_detail)
+    ImageView mIvAttractionDetail;
 
     @Inject
     AttractionDetailMvpPresenter<AttractionDetailMvpView> mPresenter;
@@ -84,8 +108,6 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
 
         View view = inflater.inflate(R.layout.frag_attraction_detail,container,false);
 
-        JodaTimeAndroid.init(getContext());
-
         getActivityComponent().inject(this);
 
         setUnBinder(ButterKnife.bind(this, view));
@@ -95,9 +117,91 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
 
         ((MainActivity) getActivity()).showFAB();
 
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            String photoReference = searchPlaceResult.photos.get(0).getPhoto_reference();
+
+            if (photoReference != null) {
+
+
+                Log.d(TAG, "Photo reference " + photoReference);
+
+
+                String url = AppConstants.API_ENDPOINT + mPresenter.generatePhotoQuery(photoReference);
+                DefaultHttpClient hc = new DefaultHttpClient();
+                HttpGet httpget = new HttpGet(url);
+                HttpContext context = new BasicHttpContext();
+                hc.setRedirectHandler(new DefaultRedirectHandler() {
+                    @Override
+                    public URI getLocationURI(HttpResponse response,
+                                              HttpContext context) throws org.apache.http.ProtocolException {
+
+                        //Capture the Location header here - This is your redirected URL
+                        System.out.println(Arrays.toString(response.getHeaders("Location")));
+
+                        return super.getLocationURI(response, context);
+
+                    }
+                });
+
+                // Response contains the image you want. If you test the redirect URL in a browser or REST CLIENT you can see it's data
+                HttpResponse response = null;
+                try {
+                    response = hc.execute(httpget, context);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    // Todo: use the Image response
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        InputStream instream = null;
+                        try {
+                            instream = entity.getContent();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Bitmap bmp = BitmapFactory.decodeStream(instream);
+
+                        mIvAttractionDetail.setImageBitmap(bmp);
+
+                        try {
+                            instream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    System.out.println(response.getStatusLine().getStatusCode() + "");
+                }
+            }
+        }else{
+            mIvAttractionDetail.setBackground(getResources().getDrawable(R.drawable.noimage));
+        }
+
+        JodaTimeAndroid.init(getContext());
+
+
         mAttraction.setText(searchPlaceResult.name);
         String rating = "Rating " + String.valueOf(searchPlaceResult.rating);
         mRating.setText(rating);
+        String totalUsers = "Total rating people: " + String.valueOf(searchPlaceResult.userRatingsTotal);
+        mTotalUser.setText(totalUsers);
+        boolean isOpenNow = false;
+        if(searchPlaceResult.openingHours != null){
+            isOpenNow = searchPlaceResult.openingHours.isOpen_now();
+        }
+        if(isOpenNow){
+            mOpenedNow.setText(R.string.opened_now);
+            mOpenedNow.setTextColor(getResources().getColor(R.color.quantum_googgreen));
+        }else{
+            mOpenedNow.setText(R.string.closed_now);
+            mOpenedNow.setTextColor(getResources().getColor(R.color.quantum_googred));
+
+        }
         return view;
 
     }

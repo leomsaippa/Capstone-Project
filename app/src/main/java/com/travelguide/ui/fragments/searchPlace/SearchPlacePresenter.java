@@ -48,7 +48,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                         getMvpView().onErrorEmptyPlace();
                     } else {
 
-                        String query = getDataManager().generateQuery(place);
+                        String query = getDataManager().generateTextPlaceQuery(place);
 
                         if (query != null) {
                             getMvpView().showLoading(null, getDataManager().getMessageLoading());

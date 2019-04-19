@@ -23,4 +23,7 @@
     <string name="error_invalid_date">End date is actually before begin date</string>
     <string name="see_details">Ver Detalhes</string>
     <string name="widget">Widget</string>
+    <string name="photo">Photo</string>
+    <string name="opened_now">Opened now</string>
+    <string name="closed_now">Closed now</string>
 </resources>

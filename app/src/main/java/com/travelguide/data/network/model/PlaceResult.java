@@ -28,10 +28,10 @@ public class PlaceResult implements Parcelable {
     public String name;
     @SerializedName("opening_hours")
     @Expose
-    public com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.OpeningHours openingHours;
+    public OpeningHours openingHours;
     @SerializedName("photos")
     @Expose
-    public List<com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.Photo> photos;
+    public List<Photos> photos;
     @SerializedName("place_id")
     @Expose
     public String placeId;
@@ -124,19 +124,19 @@ public class PlaceResult implements Parcelable {
         this.name = name;
     }
 
-    public com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.OpeningHours getOpeningHours() {
+    public OpeningHours getOpeningHours() {
         return openingHours;
     }
 
-    public void setOpeningHours(com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.OpeningHours openingHours) {
+    public void setOpeningHours(OpeningHours openingHours) {
         this.openingHours = openingHours;
     }
 
-    public List<com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.Photo> getPhotos() {
+    public List<Photos> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.Photo> photos) {
+    public void setPhotos(List<Photos> photos) {
         this.photos = photos;
     }
 
