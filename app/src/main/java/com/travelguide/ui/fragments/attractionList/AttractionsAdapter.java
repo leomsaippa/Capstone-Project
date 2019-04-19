@@ -67,9 +67,8 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AttractionsAdapterViewHolder holder, int position) {
-        PlaceResult placeResult = searchPlaceResponseList.get(position);
         holder.bind(searchPlaceResponseList.get(position).name,
-                searchPlaceResponseList.get(position).photos.get(0).photoReference,
+                searchPlaceResponseList.get(position).icon,
                 searchPlaceResponseList.get(position).rating);
 
     }
