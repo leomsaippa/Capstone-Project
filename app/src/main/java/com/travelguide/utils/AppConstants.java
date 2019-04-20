@@ -20,4 +20,8 @@ public interface AppConstants {
 
     String API_LANGUAGE="&language=en&key=";
 
+    String PARAM_NAME = "PARAM_NAME";
+
+    String PARAM_EMAIL = "PARAM_EMAIL";
+
 }

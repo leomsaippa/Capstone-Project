@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import javax.inject.Inject;
@@ -25,6 +26,9 @@ import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
 import com.travelguide.ui.fragments.itineraryDetail.ItineraryDetailFragment;
 import com.travelguide.ui.fragments.itineraryList.ItineraryListFragment;
 import com.travelguide.ui.fragments.searchPlace.SearchPlaceFragment;
+
+import static com.travelguide.utils.AppConstants.PARAM_EMAIL;
+import static com.travelguide.utils.AppConstants.PARAM_NAME;
 
 
 public class MainActivity extends BaseActivity implements MainMvpView, NavigationView.OnNavigationItemSelectedListener {
@@ -46,12 +50,27 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
     @Inject
     MainMvpPresenter<MainMvpView> mPresenter;
 
+    String name;
+
+    String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(getIntent()!=null) {
+            name = getIntent().getStringExtra(PARAM_NAME);
+            email = getIntent().getStringExtra(PARAM_EMAIL);
+        }
+
         setSupportActionBar(mToolbar);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View hView =  navigationView.getHeaderView(0);
+        TextView navName = hView.findViewById(R.id.tv_nv_header_title);
+        TextView navEmail = hView.findViewById(R.id.tv_nv_header_subtitle);
+        navName.setText(name);
+        navEmail.setText(email);
 
 
         getActivityComponent().inject(this);
