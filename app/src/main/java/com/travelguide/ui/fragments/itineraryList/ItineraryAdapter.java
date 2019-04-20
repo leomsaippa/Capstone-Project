@@ -1,5 +1,9 @@
 package com.travelguide.ui.fragments.itineraryList;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,11 +14,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.travelguide.R;
 import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.Itinerary;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectHandler;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ItineraryAdapterViewHolder> {
@@ -23,6 +38,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
 
     private List<Itinerary> itineraryList;
 
+    Context mContext;
 
     private final ItineraryAdapter.ItineraryAdapterOnClickerHandler mClickHandler;
 
@@ -35,6 +51,7 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
         }
         notifyDataSetChanged();
     }
+
 
     void clear(){
         if(itineraryList !=null){
@@ -49,6 +66,17 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
     public ItineraryAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View view = inflater.inflate(R.layout.itinerary_list_item,viewGroup, false);
+
+        mContext = view.getContext();
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8)
+        {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+            //your codes here
+
+        }
         return new ItineraryAdapterViewHolder(view);
     }
 
@@ -65,20 +93,24 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             if(list.get(i) !=null)
                 Log.d(TAG, "Lista not null");
             if(list.get(i).getAttractions()!=null){
-                    numberAttractions+=list.get(i).getAttractions().size();
-                    Log.d(TAG, "Adicionando numero de atrações " + numberAttractions);
-                }else{
-                    Log.e(TAG,"There's no attractions in day " + i +1);
-                }
+                numberAttractions+=list.get(i).getAttractions().size();
+                Log.d(TAG, "Adicionando numero de atrações " + numberAttractions);
+            }else{
+                Log.e(TAG,"There's no attractions in day " + i +1);
+            }
         }
         //todo get days
-        itineraryAdapterViewHolder.bind(itineraryList.get(position).getName(),
-                itineraryList.get(position).getDayBegin().toString() + " a " +itineraryList.get(position).getDayEnd(),
-                "",
-                //itineraryList.get(position).getPhotos().get(0),
-                String.valueOf(itineraryList.get(position).getNumber_days()),
-                String.valueOf(numberAttractions));
+        try {
+            itineraryAdapterViewHolder.bind(itineraryList.get(position).getName(),
+                    itineraryList.get(position).getDayBegin().toString() + " a " +itineraryList.get(position).getDayEnd(),
+                    String.valueOf(itineraryList.get(position).getNumber_days()),
+                    String.valueOf(numberAttractions));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -92,7 +124,6 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
     public interface ItineraryAdapterOnClickerHandler{
         void onCLick (Itinerary itinerary);
     }
-
 
     public ItineraryAdapter(ItineraryAdapterOnClickerHandler mClickHandler) {
         this.mClickHandler = mClickHandler;
@@ -128,12 +159,16 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             mClickHandler.onCLick(itineraryList.get((getAdapterPosition())));
         }
 
-        void bind(String name, String date, String poster_path, String days,
-                  String quantity) {
+        void bind(String name, String date, String days,
+                  String quantity) throws IOException {
+
+
+            String daysTotal = days + " dias";
+            String attractionsTotal = quantity + " atrações selecionadas";
             mTvName.setText(name);
             mTvDate.setText(date);
-            mTvDays.setText(days);
-            mTvAttractions.setText(quantity);
+            mTvDays.setText(daysTotal);
+            mTvAttractions.setText(attractionsTotal);
 
             mBtnSeeDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -142,10 +177,64 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
                 }
             });
 
-//            Picasso.get().load(poster_path).into(mIvAttraction);
+
+            String photoReference = itineraryList.get(getAdapterPosition()).photo_reference;
+
+            //TODO UTILIZAR O APIHELPER
+            String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoReference + "&sensor=false&key="+mContext.getString(R.string.maps_apikey);
+
+            if (url != null) {
+
+                DefaultHttpClient hc = new DefaultHttpClient();
+                HttpGet httpget = new HttpGet(url);
+                HttpContext context = new BasicHttpContext();
+                hc.setRedirectHandler(new DefaultRedirectHandler() {
+                    @Override
+                    public URI getLocationURI(HttpResponse response,
+                                              HttpContext context) throws org.apache.http.ProtocolException {
+
+                        //Capture the Location header here - This is your redirected URL
+                        System.out.println(Arrays.toString(response.getHeaders("Location")));
+
+                        return super.getLocationURI(response, context);
+
+                    }
+                });
+
+                // Response contains the image you want. If you test the redirect URL in a browser or REST CLIENT you can see it's data
+                HttpResponse response = null;
+                try {
+                    response = hc.execute(httpget, context);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (response.getStatusLine().getStatusCode() == 200) {
+                    // Todo: use the Image response
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        InputStream instream = null;
+                        try {
+                            instream = entity.getContent();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Bitmap bmp = BitmapFactory.decodeStream(instream);
+                        mIvAttraction.setImageBitmap(bmp);
+
+                        try {
+                            instream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    System.out.println(response.getStatusLine().getStatusCode() + "");
+                }
+            }
 
         }
     }
-
-
 }
+
+
+

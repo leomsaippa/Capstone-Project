@@ -1,5 +1,6 @@
 package com.travelguide.data;
 
+
 import com.travelguide.data.db.DbHelper;
 import com.travelguide.data.international.StringHelper;
 import com.travelguide.data.network.ApiHelper;
@@ -15,9 +16,10 @@ public interface DataManager extends DbHelper, StringHelper, ApiHelper, Preferen
 
     void openMainActivity();
 
-    String generateQuery(String place);
+    String generateTextPlaceQuery(String place);
 
-    Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days);
+    Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days, String photo_reference);
 
     void updateItinerary(Itinerary itinerary);
+
 }

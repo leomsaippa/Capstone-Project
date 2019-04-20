@@ -8,7 +8,9 @@ import org.joda.time.LocalDate;
 public interface SearchPlaceMvpPresenter<V extends SearchPlaceMvpView> extends MvpPresenter<V> {
 
 
-    Itinerary onBtnSearchClick(String place, LocalDate dateBeginTravel, LocalDate dateEndTravel);
+    Itinerary onBtnSearchClick(String place, LocalDate dateBeginTravel, LocalDate dateEndTravel, String photo_reference);
 
     void setApiEndPoint();
+
+    void getFormatedAddress(String toString);
 }

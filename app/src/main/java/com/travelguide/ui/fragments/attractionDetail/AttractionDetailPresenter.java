@@ -24,4 +24,9 @@ public class AttractionDetailPresenter<V extends AttractionDetailMvpView> extend
     //Todo por um ok na tela
         getDataManager().updateItinerary(itinerary);
     }
+
+    @Override
+    public String generatePhotoQuery(String photoReference) {
+        return getDataManager().generatePhotoQuery(photoReference);
+    }
 }

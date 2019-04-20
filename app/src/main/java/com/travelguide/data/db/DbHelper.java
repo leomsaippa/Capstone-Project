@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface DbHelper {
 
-    Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days);
+    Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days, String photo_reference);
 
     void updateItinerary(Itinerary itinerary);
 }

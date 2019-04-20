@@ -3,7 +3,6 @@ package com.travelguide.data.network;
 import android.util.Log;
 
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
-import com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 import com.travelguide.data.network.model.SearchPlaceResponse;
 
@@ -12,6 +11,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
 
+import static com.travelguide.utils.AppConstants.API_TEXT_SEARCH;
 
 @Singleton
 public class AppApiHelper implements ApiHelper {
@@ -34,7 +34,7 @@ public class AppApiHelper implements ApiHelper {
 
         Log.d(TAG,"Query: " + baseUrl + query);
 
-        return Rx2AndroidNetworking.get(baseUrl + query)
+        return Rx2AndroidNetworking.get(baseUrl + API_TEXT_SEARCH + query)
                 .setOkHttpClient(httpClient)
                 .build()
                 .getObjectObservable(SearchPlaceResponse.class);

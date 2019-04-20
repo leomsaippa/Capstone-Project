@@ -28,7 +28,37 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
     }
 
     @Override
-    public Itinerary onBtnSearchClick(final String place, LocalDate dateBeginTravel, LocalDate dateEndTravel) {
+    public void getFormatedAddress(String city) {
+        String query = getDataManager().generateTextCityQuery(city);
+
+        if (query != null) {
+            getMvpView().showLoading(null, getDataManager().getMessageLoading());
+
+            getCompositeDisposable().add(getDataManager().apiGetPlaces(
+                    query)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(placeResponse -> {
+                        if (!isViewAttached()) {
+                            return;
+                        }
+                        getMvpView().hideLoading();
+                        getMvpView().search(placeResponse.getPlaceResult().get(0).photos.get(0).photo_reference);
+                    }, throwable -> {
+                        if (!isViewAttached()) {
+                            return;
+                        }
+                        Log.d(TAG, "Error " + throwable.getMessage());
+                        getMvpView().hideLoading();
+                    })
+            );
+        } else {
+            Log.e(TAG, "Place request null");
+        }
+    }
+
+    @Override
+    public Itinerary onBtnSearchClick(final String place, LocalDate dateBeginTravel, LocalDate dateEndTravel, String photo_reference) {
 
 
         int quantityDays = Days.daysBetween(dateBeginTravel,dateEndTravel).getDays();
@@ -43,12 +73,12 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                     getMvpView().onErrorInvalidDate();
                 } else {
                     itinerary = getDataManager().createItinerary(place,quantityDays,dateBeginTravel,
-                            dateEndTravel, CommonUtils.createDays(quantityDays));
+                            dateEndTravel, CommonUtils.createDays(quantityDays),photo_reference);
                     if (place == null || place.isEmpty()) {
                         getMvpView().onErrorEmptyPlace();
                     } else {
 
-                        String query = getDataManager().generateQuery(place);
+                        String query = getDataManager().generateTextPlaceQuery(place);
 
                         if (query != null) {
                             getMvpView().showLoading(null, getDataManager().getMessageLoading());
@@ -62,9 +92,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                                             return;
                                         }
                                         Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(0).formattedAddress);
-                                     /*   Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(1).formattedAddress);
-                                        Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(2).formattedAddress);
-                                     */   Log.d(TAG, "Place Response aa " + placeResponse.getPlaceResult().toArray().toString());
+                                        Log.d(TAG, "Place Response aa " + placeResponse.getPlaceResult().toArray().toString());
                                         getMvpView().hideLoading();
                                         getMvpView().openAttractionListFragment(placeResponse, itinerary);
                                     }, throwable -> {

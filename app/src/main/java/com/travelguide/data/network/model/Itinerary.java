@@ -49,14 +49,20 @@ public class Itinerary implements Parcelable {
     private List<Day> list_days;
 
 
+    @SerializedName("photo_reference")
+    @Expose
+    @ColumnInfo
+    public String photo_reference;
+
 
     public Itinerary(String name, Integer number_days, LocalDate dayBegin, LocalDate dayEnd,
-                     List<Day> list_days) {
+                     List<Day> list_days, String photo_reference) {
         this.name = name;
         this.number_days=number_days;
         this.dayBegin = dayBegin;
         this.dayEnd = dayEnd;
         this.list_days=list_days;
+        this.photo_reference = photo_reference;
     }
 
     @Ignore
@@ -126,6 +132,18 @@ public class Itinerary implements Parcelable {
 
     public void setDayEnd(LocalDate dayEnd) {
         this.dayEnd = dayEnd;
+    }
+
+    public String getPhoto_reference() {
+        return photo_reference;
+    }
+
+    public void setPhoto_reference(String photo_reference) {
+        this.photo_reference = photo_reference;
+    }
+
+    public static Creator<Itinerary> getCREATOR() {
+        return CREATOR;
     }
 
     @Override
