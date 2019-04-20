@@ -12,8 +12,12 @@ public interface AppConstants {
 
     String API_SENSOR = "&sensor=false&key=";
 
-    String API_POINT_OF_INTEREST = "+city+point+of+interest&language=en&key=";
+    String API_POINT_OF_INTEREST = "+point+of+interest";
 
     String API_QUERY = "?query=";
+
+    String API_CITY = "+city";
+
+    String API_LANGUAGE="&language=en&key=";
 
 }

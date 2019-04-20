@@ -7,4 +7,6 @@ public interface StringHelper {
     String generateTextPlaceQuery(String place);
 
     String generatePhotoQuery(String photoReference);
+
+    String generateTextCityQuery(String city);
 }

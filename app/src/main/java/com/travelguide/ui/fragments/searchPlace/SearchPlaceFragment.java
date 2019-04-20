@@ -96,8 +96,15 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     @OnClick(R.id.btn_search)
     public void onClickBtnSearch(View view){
         mPlaceName.requestFocus();
-        itinerary = mPresenter.onBtnSearchClick(mPlaceName.getText().toString(),dateBegin,dateEnd);
 
+        mPresenter.getFormatedAddress(mPlaceName.getText().toString());
+
+
+    }
+
+    @Override
+    public void search(String photo_reference) {
+        itinerary = mPresenter.onBtnSearchClick(mPlaceName.getText().toString(),dateBegin,dateEnd,photo_reference);
     }
 
     @OnClick(R.id.tv_endTravel)
@@ -163,6 +170,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     public void onErrorInvalidDate() {
         mTextEndTravel.setError(getString(R.string.error_invalid_date));
     }
+
 
     @Override
     public void openAttractionListFragment(SearchPlaceResponse placeResponse, Itinerary itinerary) {

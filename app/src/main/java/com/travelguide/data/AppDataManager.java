@@ -50,6 +50,11 @@ public class AppDataManager implements DataManager{
         return mStringHelper.generatePhotoQuery(photoReference);
     }
 
+    @Override
+    public String generateTextCityQuery(String city) {
+        return mStringHelper.generateTextCityQuery(city);
+    }
+
 
     @Override
     public void apiSetEndPoint(String endpoint) {
@@ -69,8 +74,8 @@ public class AppDataManager implements DataManager{
 
     @Override
     public Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel,
-                                     LocalDate dateEndTravel, List<Day> days) {
-        return mDbHelper.createItinerary(place,quantityDays,dateBeginTravel,dateEndTravel,days);
+                                     LocalDate dateEndTravel, List<Day> days, String photo_reference) {
+        return mDbHelper.createItinerary(place,quantityDays,dateBeginTravel,dateEndTravel,days, photo_reference);
     }
 
     @Override

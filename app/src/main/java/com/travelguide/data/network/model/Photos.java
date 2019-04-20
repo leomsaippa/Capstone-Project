@@ -28,6 +28,25 @@ public class Photos implements Parcelable {
     public int width;
 
 
+    protected Photos(Parcel in) {
+        height = in.readInt();
+        htmlAttributions = in.createStringArrayList();
+        photo_reference = in.readString();
+        width = in.readInt();
+    }
+
+    public static final Creator<Photos> CREATOR = new Creator<Photos>() {
+        @Override
+        public Photos createFromParcel(Parcel in) {
+            return new Photos(in);
+        }
+
+        @Override
+        public Photos[] newArray(int size) {
+            return new Photos[size];
+        }
+    };
+
     public int getHeight() {
         return height;
     }
@@ -67,6 +86,9 @@ public class Photos implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeInt(height);
+        dest.writeStringList(htmlAttributions);
+        dest.writeString(photo_reference);
+        dest.writeInt(width);
     }
 }

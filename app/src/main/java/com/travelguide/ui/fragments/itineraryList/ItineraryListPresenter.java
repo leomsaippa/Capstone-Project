@@ -23,4 +23,10 @@ public class ItineraryListPresenter<V extends ItineraryListMvpView> extends Base
     public void onBtnLoadItinerariesClick() {
         Log.d(TAG,"onBtnLoadItinerariesClick");
     }
+
+    @Override
+    public String generateCityQuery(String place) {
+        return getDataManager().generateTextCityQuery(place);
+    }
+
 }

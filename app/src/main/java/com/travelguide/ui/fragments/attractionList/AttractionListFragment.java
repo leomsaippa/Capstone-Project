@@ -17,6 +17,7 @@ import com.travelguide.R;
 import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.PlaceResult;
 import com.travelguide.data.network.model.SearchPlaceResponse;
+import com.travelguide.ui.SimpleDividerItemDecoration;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
@@ -73,12 +74,11 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             mSearchPlaceResponseList = bundle.getParcelable(PARAM_SEARCH_RESPONSE);
-            Log.d(TAG,"TESTE LELEO " + mSearchPlaceResponseList.getPlaceResult().get(0).getPhotos().toArray().toString());
             itinerary = bundle.getParcelable(PARAM_ITINERARY);
-        }else{
-            Log.e(TAG,"Error on create");
+        } else {
+            Log.e(TAG, "Error on create");
         }
     }
 
@@ -86,7 +86,7 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.frag_attraction_list,container,false);
+        View view = inflater.inflate(R.layout.frag_attraction_list, container, false);
 
         getActivityComponent().inject(this);
 
@@ -100,6 +100,7 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
 
         mRecyclerView.setLayoutManager(layoutManager);
 
+        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         mAdapter = new AttractionsAdapter(this);
         setPlaceResponseList();
         setItinerary();

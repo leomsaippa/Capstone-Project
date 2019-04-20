@@ -85,6 +85,7 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
         loadItineraries();
 
         layoutManager = new GridLayoutManager(getContext(),1);
+
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setLayoutManager(layoutManager);

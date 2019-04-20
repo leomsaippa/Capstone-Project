@@ -1,6 +1,5 @@
 package com.travelguide.data.db;
 
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.util.Log;
 
@@ -11,7 +10,6 @@ import com.travelguide.utils.AppExecutors;
 
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,8 +33,8 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
-    public Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days) {
-        Itinerary itinerary = new Itinerary(place, quantityDays, dateBeginTravel, dateEndTravel, days);
+    public Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days, String photo_reference) {
+        Itinerary itinerary = new Itinerary(place, quantityDays, dateBeginTravel, dateEndTravel, days, photo_reference);
 
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override

@@ -29,7 +29,13 @@ public class AppStringHelper implements StringHelper {
     @Override
     public String generateTextPlaceQuery(String place) {
         String query = CommonUtils.mountCityQuery(place);
-        return query + AppConstants.API_POINT_OF_INTEREST + mContext.getString(R.string.maps_apikey);
+        return query + AppConstants.API_CITY +AppConstants.API_POINT_OF_INTEREST +AppConstants.API_LANGUAGE+ mContext.getString(R.string.maps_apikey);
+    }
+
+    @Override
+    public String generateTextCityQuery(String city){
+        String query = CommonUtils.mountCityQuery(city);
+        return query + AppConstants.API_CITY +AppConstants.API_LANGUAGE  + mContext.getString(R.string.maps_apikey);
     }
 
     @Override
