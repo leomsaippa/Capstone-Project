@@ -16,6 +16,8 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
+import static com.travelguide.utils.AppConstants.ZERO_RESULTS;
+
 public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePresenter<V>
         implements SearchPlaceMvpPresenter<V>  {
 
@@ -50,6 +52,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                         }
                         Log.d(TAG, "Error " + throwable.getMessage());
                         getMvpView().hideLoading();
+                        getMvpView().showInternetError();
                     })
             );
         } else {
@@ -59,7 +62,6 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
 
     @Override
     public Itinerary onBtnSearchClick(final String place, LocalDate dateBeginTravel, LocalDate dateEndTravel, String photo_reference) {
-
 
         int quantityDays = Days.daysBetween(dateBeginTravel,dateEndTravel).getDays();
 
@@ -72,8 +74,7 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                 if (quantityDays<=0) {
                     getMvpView().onErrorInvalidDate();
                 } else {
-                    itinerary = getDataManager().createItinerary(place,quantityDays,dateBeginTravel,
-                            dateEndTravel, CommonUtils.createDays(quantityDays),photo_reference);
+
                     if (place == null || place.isEmpty()) {
                         getMvpView().onErrorEmptyPlace();
                     } else {
@@ -91,16 +92,23 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
                                         if (!isViewAttached()) {
                                             return;
                                         }
-                                        Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(0).formattedAddress);
-                                        Log.d(TAG, "Place Response aa " + placeResponse.getPlaceResult().toArray().toString());
-                                        getMvpView().hideLoading();
-                                        getMvpView().openAttractionListFragment(placeResponse, itinerary);
+                                        if(placeResponse.getStatus().equals(ZERO_RESULTS)){
+                                            getMvpView().hideLoading();
+                                            getMvpView().showZeroResultError();
+                                        }else {
+                                            itinerary = getDataManager().createItinerary(place, quantityDays, dateBeginTravel,
+                                                    dateEndTravel, CommonUtils.createDays(quantityDays), photo_reference);
+                                            Log.d(TAG, "Place Response " + placeResponse.getPlaceResult().get(0).formattedAddress);
+                                            getMvpView().hideLoading();
+                                            getMvpView().openAttractionListFragment(placeResponse, itinerary);
+                                        }
                                     }, throwable -> {
                                         if (!isViewAttached()) {
                                             return;
                                         }
                                         Log.d(TAG, "Error " + throwable.getMessage());
                                         getMvpView().hideLoading();
+                                        getMvpView().showInternetError();
                                     })
                             );
                         } else {

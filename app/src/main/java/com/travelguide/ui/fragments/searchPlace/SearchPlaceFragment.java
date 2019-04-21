@@ -1,9 +1,9 @@
 package com.travelguide.ui.fragments.searchPlace;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +37,6 @@ import butterknife.OnClick;
 public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpView, DatePickerFragment.OnSelectedDate {
 
     public static final String TAG = SearchPlaceFragment.class.getSimpleName();
-    private static final int AUTOCOMPLETE_REQUEST_CODE = 1 ;
-    private static final String PARAM_ITINERARY = "PARAM_ITINERARY";
-
     Itinerary itinerary;
 
     @BindView(R.id.btn_search)
@@ -67,7 +64,6 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
         searchPlaceFragment.setArguments(args);
         return searchPlaceFragment;
     }
-
 
 
 
@@ -172,9 +168,36 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
     @Override
     public void openAttractionListFragment(SearchPlaceResponse placeResponse, Itinerary itinerary) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_main, AttractionListFragment.getInstance(placeResponse, itinerary), AttractionListFragment.TAG)
-                .commit();
+        if(getActivity()!=null){
+            if(getActivity().getSupportFragmentManager()!=null){
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_main, AttractionListFragment.getInstance(placeResponse, itinerary), AttractionListFragment.TAG)
+                        .addToBackStack(AttractionListFragment.TAG)
+                        .commit();
+
+            }
+        }
+    }
+
+    @Override
+    public void showInternetError() {
+        DialogInterface.OnClickListener positiveDialog = (dialog, which) -> {
+            onClickBtnSearch(getView());
+        };
+
+        showAlertMessage(getString(R.string.something_wrong),
+                getString(R.string.try_again),
+                positiveDialog,
+                getString(R.string.ok),
+                null);
+    }
+
+    @Override
+    public void showZeroResultError() {
+        showAlertMessage(getString(R.string.zero_results),
+                getString(R.string.ok),
+                null,
+                null,
+                null);
     }
 }

@@ -24,4 +24,5 @@ public interface AppConstants {
 
     String PARAM_EMAIL = "PARAM_EMAIL";
 
+    String ZERO_RESULTS = "ZERO_RESULTS";
 }
