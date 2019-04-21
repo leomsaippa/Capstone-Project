@@ -22,6 +22,7 @@ import butterknife.OnClick;
 import com.travelguide.R;
 import com.travelguide.ui.base.BaseActivity;
 import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
+import com.travelguide.ui.fragments.attractionList.AttractionListFragment;
 import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
 import com.travelguide.ui.fragments.itineraryDetail.ItineraryDetailFragment;
 import com.travelguide.ui.fragments.itineraryList.ItineraryListFragment;
@@ -98,8 +99,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            //Não faz naada para não voltar a tela de Login
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+                getFragmentManager().beginTransaction().commit();
+
+            }
         }
+
     }
 
     @Override
@@ -130,9 +136,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_router) {
             mPresenter.onConfirmItinerary();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_widget) {
             ItineraryDetailFragment fragment = (ItineraryDetailFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDetailFragment.TAG);
             if (fragment != null) {
                 fragment.addWidget();
@@ -140,6 +146,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
                 Toast.makeText(this, "You can't add widget. Go to your list day.", Toast.LENGTH_SHORT).show();
             }
 
+        }else if(id == R.id.nav_search){
+            showSearchPlaceFragment();
         }
         mDrawer.closeDrawer(GravityCompat.START);
         return true;
@@ -149,6 +157,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_main, SearchPlaceFragment.getInstance(), SearchPlaceFragment.TAG)
+                .addToBackStack(SearchPlaceFragment.TAG)
                 .commit();
     }
 
@@ -157,25 +166,53 @@ public class MainActivity extends BaseActivity implements MainMvpView, Navigatio
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_main, ItineraryListFragment.getInstance(), ItineraryListFragment.TAG)
+                .addToBackStack(ItineraryListFragment.TAG)
                 .commit();
     }
 
-    public void showFAB () {
+    public void showFAB (String fragment) {
+        if(fragment.equals(AttractionListFragment.TAG)){
+            mFab.setImageDrawable(getResources().getDrawable(android.R.drawable.checkbox_on_background));
+        }else if(fragment.equals(AttractionDetailFragment.TAG)) {
+            mFab.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_input_add
+            ));
+        }else if(fragment.equals(ItineraryDayFragment.TAG)){
+            mFab.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_dialog_map));
+        }
         mFab.show();
     }
 
+    public void showWidget(){
+        Menu nav_Menu = mNavigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_widget).setVisible(true);
+    }
+    public void hideWidget(){
+        Menu nav_Menu = mNavigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_widget).setVisible(false);
+    }
 
     @OnClick(R.id.fab)
     public void onFabClick (View view){
-        AttractionDetailFragment currentFragment = (AttractionDetailFragment) getSupportFragmentManager().findFragmentByTag(AttractionDetailFragment.TAG);
-        if (currentFragment != null) {
-            currentFragment.showCalendar();
+        AttractionDetailFragment attractionDetailFragment = (AttractionDetailFragment) getSupportFragmentManager().findFragmentByTag(AttractionDetailFragment.TAG);
+        if (attractionDetailFragment != null) {
+            Toast.makeText(this, "Select the date to this attraction to your itinerary! ", Toast.LENGTH_SHORT).show();
+            attractionDetailFragment.showCalendar();
         } else {
-            ItineraryDayFragment fragment = (ItineraryDayFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDayFragment.TAG);
-            if (fragment != null) {
-                fragment.showMap();
+            ItineraryDayFragment itineraryDayFragment = (ItineraryDayFragment) getSupportFragmentManager().findFragmentByTag(ItineraryDayFragment.TAG);
+            if (itineraryDayFragment != null) {
+                itineraryDayFragment.showMap();
+                mFab.hide();
+            } else {
+                AttractionListFragment attractionListFragment = (AttractionListFragment) getSupportFragmentManager().findFragmentByTag(AttractionListFragment.TAG);
+                if (attractionListFragment != null) {
+                    Toast.makeText(this, "Router saved!", Toast.LENGTH_SHORT).show();
+                    mFab.hide();
+                    showItineraryListFragment();
+
+                }
             }
 
         }
     }
+
 }
