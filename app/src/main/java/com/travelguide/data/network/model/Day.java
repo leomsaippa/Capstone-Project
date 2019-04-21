@@ -12,7 +12,7 @@ public class Day implements Parcelable {
 
     @SerializedName("attractions")
     @Expose
-    private List<String> attractions;
+    private List<Attraction> attractions;
 
     //Position day. For example (travel from April 1 to April 8. First day will have id 0
     @SerializedName("id")
@@ -23,16 +23,8 @@ public class Day implements Parcelable {
         this.id = id;
     }
 
-    public List<String> getAttractions() {
-        return attractions;
-    }
-
-    public void setAttractions(List<String> attractions) {
-        this.attractions = attractions;
-    }
-
     protected Day(Parcel in) {
-        attractions = in.createStringArrayList();
+        attractions = in.createTypedArrayList(Attraction.CREATOR);
         id = in.readInt();
     }
 
@@ -48,6 +40,15 @@ public class Day implements Parcelable {
         }
     };
 
+    public List<Attraction> getAttractions() {
+        return attractions;
+    }
+
+    public void setAttractions(List<Attraction> attractions) {
+        this.attractions = attractions;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -59,7 +60,7 @@ public class Day implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringList(attractions);
+        dest.writeTypedList(attractions);
         dest.writeInt(id);
     }
 }
