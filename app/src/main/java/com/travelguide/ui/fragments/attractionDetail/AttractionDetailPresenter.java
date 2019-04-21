@@ -21,8 +21,8 @@ public class AttractionDetailPresenter<V extends AttractionDetailMvpView> extend
 
     @Override
     public void updateItinerary(Itinerary itinerary) {
-    //Todo por um ok na tela
         getDataManager().updateItinerary(itinerary);
+        getMvpView().onSelectedDateSuccess();
     }
 
     @Override

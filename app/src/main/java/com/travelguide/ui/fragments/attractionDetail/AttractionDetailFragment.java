@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travelguide.R;
+import com.travelguide.data.network.model.Attraction;
+import com.travelguide.data.network.model.Geometry;
 import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.network.model.PlaceResult;
 import com.travelguide.ui.base.BaseFragment;
@@ -115,7 +118,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         mPresenter.onAttach(this);
 
 
-        ((MainActivity) getActivity()).showFAB();
+        ((MainActivity) getActivity()).showFAB(AttractionDetailFragment.TAG);
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8) {
@@ -221,25 +224,50 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         DateTimeZone jodaDateTimeZone = DateTimeZone.forID(timeZone.getID());
         DateTime dateTime = new DateTime(calendar.getTimeInMillis(), jodaDateTimeZone);
 
-
         LocalDate localDate = dateTime.toLocalDate();
 
-        addAttraction(searchPlaceResult.name, localDate);
+        addAttraction(searchPlaceResult.name, localDate,searchPlaceResult.getGeometry());
 
     }
 
 
-    private void addAttraction(String name,LocalDate date){
-            LocalDate dayBegin = itinerary.getDayBegin();
-            int quantityDays = Days.daysBetween(dayBegin, date).getDays();
-            List<String> attractions = itinerary.getList_days().get(quantityDays).getAttractions();
-            if(attractions == null){
+    private void addAttraction(String name, LocalDate date, Geometry geometry){
+        Attraction attraction = new Attraction();
+        LocalDate dayBegin = itinerary.getDayBegin();
+        int quantityDays = Days.daysBetween(dayBegin, date).getDays();
+
+        if(quantityDays < 1 || quantityDays > itinerary.getNumber_days()){
+            onSelectedDateError();
+        }else {
+
+
+            List<Attraction> attractions = itinerary.getList_days().get(quantityDays).getAttractions();
+            if (attractions == null) {
                 attractions = new ArrayList<>();
             }
-            attractions.add(name);
+            attraction.setLat(geometry.getLocation().getLat());
+            attraction.setLng(geometry.getLocation().getLng());
+            attraction.setName(name);
+            attractions.add(attraction);
             itinerary.getList_days().get(quantityDays).setAttractions(attractions);
-            Log.d(TAG,"Adding to itinerary " + itinerary.getList_days().get(quantityDays).getAttractions());
+            Log.d(TAG, "Adding to itinerary " + itinerary.getList_days().get(quantityDays).getAttractions());
             mPresenter.updateItinerary(itinerary);
+
+        }
     }
 
+    private void onSelectedDateError() {
+        Toast.makeText(getContext(), "This day is not present in your travel", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSelectedDateSuccess() {
+        Toast.makeText(getContext(), searchPlaceResult.name + " added succesfully to day " , Toast.LENGTH_SHORT).show();
+
+        if(getActivity()!=null){
+            if(getActivity().getSupportFragmentManager()!=null){
+                getActivity().onBackPressed();
+            }
+        }
+    }
 }
