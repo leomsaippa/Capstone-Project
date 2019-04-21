@@ -2,8 +2,10 @@ package com.travelguide.ui.base;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.DatePicker;
 
@@ -45,4 +47,20 @@ public class BaseActivity extends AppCompatActivity implements MvpView {
             mProgressDialog.cancel();
         }
     }
+
+    @Override
+    public void showAlertMessage(String message, String textPositiveButton,
+                                 DialogInterface.OnClickListener onClickListenerPositive,
+                                 String textNegativeButton,
+                                 DialogInterface.OnClickListener onClickListenerNegative) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message);
+        builder.setPositiveButton(textPositiveButton, onClickListenerPositive);
+        builder.setNegativeButton(textNegativeButton, onClickListenerNegative);
+        builder.setCancelable(false);
+        builder.create().show();
+    }
+
+
+
 }

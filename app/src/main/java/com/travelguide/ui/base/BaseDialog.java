@@ -1,12 +1,8 @@
 package com.travelguide.ui.base;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
-import android.widget.DatePicker;
-
-import java.util.Calendar;
 
 import butterknife.Unbinder;
 
@@ -34,6 +30,17 @@ public class BaseDialog extends DialogFragment implements DialogMvpView {
     public void hideLoading() {
         if (mActivity != null) {
             mActivity.hideLoading();
+        }
+    }
+
+    @Override
+    public void showAlertMessage(String message, String textPositiveButton,
+                                 DialogInterface.OnClickListener onClickListenerPositive,
+                                 String textNegativeButton,
+                                 DialogInterface.OnClickListener onClickListenerNegative) {
+        if(mActivity != null){
+            mActivity.showAlertMessage(message,textPositiveButton,onClickListenerPositive,
+                    textNegativeButton,onClickListenerNegative);
         }
     }
 
