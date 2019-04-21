@@ -36,14 +36,11 @@ public class AppDbHelper implements DbHelper {
     public Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days, String photo_reference) {
         Itinerary itinerary = new Itinerary(place, quantityDays, dateBeginTravel, dateEndTravel, days, photo_reference);
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
+        AppExecutors.getInstance().diskIO().execute(() -> {
 
-                currentId = itineraryDbHelper.itineraryDao().insertItinerary(itinerary);
-                Log.d(TAG, "Current id " +itinerary.getId());
+            currentId = itineraryDbHelper.itineraryDao().insertItinerary(itinerary);
+            Log.d(TAG, "Current id " +itinerary.getId());
 
-            }
         });
 
         while (currentId==-1){
@@ -57,15 +54,12 @@ public class AppDbHelper implements DbHelper {
     @Override
     public void updateItinerary(Itinerary itinerary) {
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
+        AppExecutors.getInstance().diskIO().execute(() -> {
 
-                Log.d(TAG, "Current id " +itinerary.getId());
-                itineraryDbHelper.itineraryDao().update(itinerary);
-                Log.d(TAG,"Itinerary update successfully ");
+            Log.d(TAG, "Current id " +itinerary.getId());
+            itineraryDbHelper.itineraryDao().update(itinerary);
+            Log.d(TAG,"Itinerary update successfully ");
 
-            }
         });
 
     }

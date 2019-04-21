@@ -93,14 +93,18 @@ public class ItineraryDayFragment extends BaseFragment implements ItineraryDayMv
 
         mPresenter.onAttach(this);
 
-        ((MainActivity)getActivity()).showFAB(ItineraryDayFragment.TAG);
-        ((MainActivity)getActivity()).hideWidget();
+        MainActivity activity = ((MainActivity)getActivity());
 
+        if(activity!=null) {
+            activity.showFAB(ItineraryDayFragment.TAG);
+            activity.hideWidget();
+        }
         layoutManager = new GridLayoutManager(getContext(),1);
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+        if(getContext()!=null)
+            mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
         mAdapter = new ItineraryDayAdapter(this);
 
@@ -108,12 +112,9 @@ public class ItineraryDayFragment extends BaseFragment implements ItineraryDayMv
 
         mRecyclerView.setAdapter(mAdapter);
 
-        mButtonTryAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //todo add treatment
-                Log.d(TAG,"Onclick ");
-            }
+        mButtonTryAgain.setOnClickListener(view1 -> {
+            //todo add treatment
+            Log.d(TAG,"Onclick ");
         });
 
 
@@ -137,11 +138,15 @@ public class ItineraryDayFragment extends BaseFragment implements ItineraryDayMv
     }
 
     private void openDayRouteFragment(List<Attraction> attractions) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_main, DayRouteFragment.getInstance((ArrayList<Attraction>) attractions), DayRouteFragment.TAG)
-                .commit();
-    }
+        if(getActivity() != null){
+            if(getActivity().getSupportFragmentManager() != null){
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_main, DayRouteFragment.getInstance((ArrayList<Attraction>) attractions), DayRouteFragment.TAG)
+                        .commit();
+            }
 
+        }
+    }
 
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_view"
     android:layout_gravity="center"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -40,7 +39,7 @@
         android:layout_gravity="start"
         android:layout_marginStart="20dp"
         android:textSize="15sp"
-        tools:text="7 dias"/>
+        tools:text="7 days"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,7 +52,7 @@
             android:layout_marginTop="5dp"
             android:textSize="15sp"
             android:layout_gravity="center"
-            tools:text="15 atrações selecionadas"/>
+            tools:text="15 attractions selected "/>
 
         <Button
             android:id="@+id/btn_itinerary_item_detail"

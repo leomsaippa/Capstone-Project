@@ -14,8 +14,6 @@ import java.util.List;
 
 public interface DataManager extends DbHelper, StringHelper, ApiHelper, PreferencesHelper {
 
-    void openMainActivity();
-
     String generateTextPlaceQuery(String place);
 
     Itinerary createItinerary(String place, int quantityDays, LocalDate dateBeginTravel, LocalDate dateEndTravel, List<Day> days, String photo_reference);

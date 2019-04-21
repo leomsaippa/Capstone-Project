@@ -21,6 +21,8 @@ import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.itineraryDetail.ItineraryDetailFragment;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -81,7 +83,7 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
         mAdapter = new ItineraryAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-       // mRecyclerView.addOnScrollListener(scrollListener);
+        // mRecyclerView.addOnScrollListener(scrollListener);
 
         return view;
 
@@ -121,7 +123,7 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
             @Override
             public void onChanged(@Nullable Itinerary it) {
                 itinerary.removeObserver(this);
-                Log.d(TAG, "Load itinerary " + it.getName());
+                Log.d(TAG, "Load itinerary " + Objects.requireNonNull(it).getName());
 
             }
         });
@@ -135,11 +137,17 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
     }
 
     private void openItineraryDetailFragment(Itinerary itinerary) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_main, ItineraryDetailFragment.getInstance(itinerary), ItineraryDetailFragment.TAG)
-                .addToBackStack(ItineraryDetailFragment.TAG)
-                .commit();
+        if(getActivity() != null){
+            if(getActivity().getSupportFragmentManager() != null){
+
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_main, ItineraryDetailFragment.getInstance(itinerary), ItineraryDetailFragment.TAG)
+                        .addToBackStack(ItineraryDetailFragment.TAG)
+                        .commit();
+
+            }
+        }
     }
 
 

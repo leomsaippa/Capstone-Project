@@ -32,15 +32,6 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
         notifyDataSetChanged();
     }
 
-    public void clear(){
-        if(dayList !=null){
-            dayList.clear();
-        }else{
-            Log.d(TAG,"Can't clear. dayList list is null!");
-        }
-    }
-
-
     public interface ItineraryDetailAdapterOnClickHandler {
         void onClick (Day day);
     }
@@ -87,7 +78,6 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
         public void onClick(View v) {
             Log.d(TAG,"onClick " + getAdapterPosition());
             if(dayList.get(getAdapterPosition()) != null){
-
                 mClickHandler.onClick(dayList.get((getAdapterPosition())));
             }else{
                 Log.e(TAG,"You cant click in a day without attractions");
@@ -95,12 +85,12 @@ public class ItineraryDetailAdapter extends RecyclerView.Adapter<ItineraryDetail
         }
 
         public void bind(List<Attraction> attractions) {
-            String attractionsText = "0 atrações selecionadas ";
+            String attractionsText = "0 attractions selected";
             if(attractions !=null){
-                attractionsText = attractions.size() + " atrações selecionadas";
+                attractionsText = attractions.size() + " attractions selected";
             }
             int pos = getAdapterPosition() + 1;
-            String day = "Dia " + pos;
+            String day = "Day " + pos;
             mTvDay.setText(day);
             mTvAttractions.setText(attractionsText);
         }

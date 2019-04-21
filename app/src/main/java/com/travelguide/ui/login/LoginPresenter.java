@@ -16,8 +16,4 @@ public class LoginPresenter<V extends LoginMvpView> extends BasePresenter<V>
         super(dataManager, schedulerProvider, compositeDisposable);
     }
 
-    @Override
-    public void openMainActivity() {
-        getDataManager().openMainActivity();
-    }
 }

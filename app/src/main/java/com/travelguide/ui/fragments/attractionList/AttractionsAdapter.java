@@ -36,14 +36,6 @@ public class AttractionsAdapter extends RecyclerView.Adapter<AttractionsAdapter.
         notifyDataSetChanged();
     }
 
-    void clear(){
-        if(searchPlaceResponseList !=null){
-            searchPlaceResponseList.clear();
-        }else{
-            Log.d(TAG,"Can't clear. AttractionResultList list is null!");
-        }
-    }
-
     public void setItinerary(Itinerary itinerary) {
         this.itinerary = itinerary;
     }

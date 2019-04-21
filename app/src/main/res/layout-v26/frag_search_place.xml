@@ -43,7 +43,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            />
+            android:importantForAutofill="no" />
 
     </android.support.v7.widget.CardView>
 

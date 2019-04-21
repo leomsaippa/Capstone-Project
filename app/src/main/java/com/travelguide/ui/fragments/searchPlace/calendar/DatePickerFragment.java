@@ -6,12 +6,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.DatePicker;
 
 import com.travelguide.ui.base.BaseDialog;
 
 import java.util.Calendar;
+import java.util.Objects;
 
 public class DatePickerFragment extends BaseDialog implements DatePickerDialog.OnDateSetListener  {
 
@@ -44,7 +44,7 @@ public class DatePickerFragment extends BaseDialog implements DatePickerDialog.O
         int day = c.get(Calendar.DAY_OF_MONTH);
 
 
-        return new DatePickerDialog(getContext(), this, year, month, day);
+        return new DatePickerDialog(Objects.requireNonNull(getContext()), this, year, month, day);
     }
 
     @Override
