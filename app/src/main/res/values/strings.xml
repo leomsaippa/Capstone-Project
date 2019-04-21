@@ -34,4 +34,8 @@
     <string name="something_wrong">Something went wrong. Please try again</string>
     <string name="zero_results">No places were found. Please try another city</string>
     <string name="ok">Ok</string>
+    <string name="star_for_rating">Star for rating</string>
+    <string name="attraction_detail_image">Attraction detail image</string>
+    <string name="calendar_for_choose_date">Calendar for choose date</string>
+    <string name="logo">logo</string>
 </resources>
