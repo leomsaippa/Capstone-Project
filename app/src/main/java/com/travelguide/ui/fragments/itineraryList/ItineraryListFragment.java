@@ -12,9 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.travelguide.R;
 import com.travelguide.data.db.ItineraryDbHelper;
@@ -40,15 +37,6 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
 
     @BindView(R.id.rv_itinerary_list)
     RecyclerView mRecyclerView;
-
-    @BindView(R.id.tv_itinerary_error)
-    TextView mError;
-
-    @BindView(R.id.pb_itinerary_loading)
-    ProgressBar mProgressBar;
-
-    @BindView(R.id.btn_itinerary_try_again)
-    Button mButtonTryAgain;
 
     GridLayoutManager layoutManager;
 
@@ -92,15 +80,6 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
 
         mAdapter = new ItineraryAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-
-        mButtonTryAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //todo add treatment
-                Log.d(TAG,"Onclick ");
-            }
-        });
-
 
        // mRecyclerView.addOnScrollListener(scrollListener);
 
@@ -159,6 +138,7 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_main, ItineraryDetailFragment.getInstance(itinerary), ItineraryDetailFragment.TAG)
+                .addToBackStack(ItineraryDetailFragment.TAG)
                 .commit();
     }
 
@@ -169,26 +149,8 @@ public class ItineraryListFragment extends BaseFragment implements ItineraryList
         mPresenter.onBtnLoadItinerariesClick();
     }
 
-
-    private void showError(){
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mError.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mButtonTryAgain.setVisibility(View.VISIBLE);
-    }
-
-    private void showLoading(){
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mError.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mButtonTryAgain.setVisibility(View.INVISIBLE);
-    }
-
     private void showList(){
         mRecyclerView.setVisibility(View.VISIBLE);
-        mError.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mButtonTryAgain.setVisibility(View.INVISIBLE);
     }
 
     @Override

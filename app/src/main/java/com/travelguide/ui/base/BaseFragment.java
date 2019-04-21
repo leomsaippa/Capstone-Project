@@ -2,7 +2,7 @@ package com.travelguide.ui.base;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.support.v4.app.DialogFragment;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 
 import com.travelguide.di.component.ActivityComponent;
@@ -51,6 +51,18 @@ public class BaseFragment extends Fragment implements MvpView {
             mProgressDialog.cancel();
         }
         mProgressDialog = null;
+    }
+
+    @Override
+    public void showAlertMessage(String message, String textPositiveButton,
+                                 DialogInterface.OnClickListener onClickListenerPositive,
+                                 String textNegativeButton,
+                                 DialogInterface.OnClickListener onClickListenerNegative) {
+        if(mActivity != null){
+            mActivity.showAlertMessage(message,textPositiveButton,onClickListenerPositive,
+                    textNegativeButton,onClickListenerNegative);
+        }
+
     }
 
 }

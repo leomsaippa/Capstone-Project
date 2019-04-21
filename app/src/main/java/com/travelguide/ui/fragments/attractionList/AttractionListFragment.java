@@ -1,5 +1,6 @@
 package com.travelguide.ui.fragments.attractionList;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.travelguide.data.network.model.SearchPlaceResponse;
 import com.travelguide.ui.SimpleDividerItemDecoration;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.attractionDetail.AttractionDetailFragment;
+import com.travelguide.ui.main.MainActivity;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 
 import javax.inject.Inject;
@@ -93,6 +95,8 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
         setUnBinder(ButterKnife.bind(this, view));
 
         mPresenter.onAttach(this);
+
+        ((MainActivity)getActivity()).showFAB(AttractionListFragment.TAG);
 
 
         layoutManager = new GridLayoutManager(getContext(),1);
@@ -175,6 +179,7 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.content_main, AttractionDetailFragment.getInstance(searchPlaceResult, itinerary), AttractionDetailFragment.TAG)
+                .addToBackStack(AttractionDetailFragment.TAG)
                 .commit();
     }
 }

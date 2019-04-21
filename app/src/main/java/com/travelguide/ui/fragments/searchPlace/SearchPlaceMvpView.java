@@ -17,4 +17,8 @@ public interface SearchPlaceMvpView extends MvpView {
     void onErrorInvalidDate();
 
     void search(String photo_reference);
+
+    void showInternetError();
+
+    void showZeroResultError();
 }

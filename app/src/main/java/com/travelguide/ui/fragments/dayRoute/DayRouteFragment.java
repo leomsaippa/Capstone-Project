@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -32,6 +30,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.EncodedPolyline;
 import com.travelguide.R;
+import com.travelguide.data.network.model.Attraction;
 import com.travelguide.ui.base.BaseFragment;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
     public static final String TAG = DayRouteFragment.class.getSimpleName();
     public static final String PARAM_ATTRACTIONS = "PARAM_ATTRACTIONS";
 
-    private List<String> attractions;
+    private List<Attraction> attractions;
 
     MapView mMapView;
     private GoogleMap googleMap;
@@ -54,11 +53,11 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
     @Inject
     DayRouteMvpPresenter<DayRouteMvpView> mPresenter;
 
-    public static DayRouteFragment getInstance(ArrayList<String> attractions) {
+    public static DayRouteFragment getInstance(ArrayList<Attraction> attractions) {
         Bundle args = new Bundle();
         DayRouteFragment dayRouteFragment = new DayRouteFragment();
         dayRouteFragment.setArguments(args);
-        args.putStringArrayList(PARAM_ATTRACTIONS, attractions);
+        args.putParcelableArrayList(PARAM_ATTRACTIONS, attractions);
         return dayRouteFragment;
     }
 
@@ -67,7 +66,7 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            attractions = bundle.getStringArrayList(PARAM_ATTRACTIONS);
+            attractions = bundle.getParcelableArrayList(PARAM_ATTRACTIONS);
         } else {
             Log.e(TAG, "Error on create");
         }
@@ -103,8 +102,8 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
                 Log.d(TAG,"onMapReady");
                 googleMap = mMap;
 
-               // drawRoute();
-                /*
+
+                drawRoute(attractions);
                 // For showing a move to my location button
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG,"Missing permissions");
@@ -120,7 +119,6 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            */
             }
         });
 
@@ -153,15 +151,26 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
     }
 
 
-//TA FUNCIONANDO, MAS SO CHAMAR QUANDO FOR PRA VALER
-    private void drawRoute(){
-        LatLng barcelona = new LatLng(41.385064,2.173403);
-        googleMap.addMarker(new MarkerOptions().position(barcelona).title("Marker in Barcelona"));
+    private void drawRoute(List<Attraction> attractions) {
 
-        LatLng madrid = new LatLng(40.416775,-3.70379);
-        googleMap.addMarker(new MarkerOptions().position(madrid).title("Marker in Madrid"));
+        double firstLat = attractions.get(0).getLat();
+        double firstLng = attractions.get(0).getLng();
+        LatLng firstLatLng = new LatLng(firstLat, firstLng);
+        googleMap.addMarker(new MarkerOptions().position(firstLatLng).title(attractions.get(0).getName()));
 
-        LatLng zaragoza = new LatLng(41.648823,-0.889085);
+        double lastLat=0;
+        double lastLng=0;
+        LatLng lastLatLng = null;
+
+        if (attractions.size() > 1) {
+            for (int i = 0; i < attractions.size(); i++) {
+                lastLat = attractions.get(i).getLat();
+                lastLng = attractions.get(i).getLng();
+                lastLatLng = new LatLng(lastLat, lastLng);
+                googleMap.addMarker(new MarkerOptions().position(lastLatLng).title(attractions.get(i).getName()));
+
+            }
+        }
 
         //Define list to get all latlng for the route
         List<LatLng> path = new ArrayList();
@@ -171,39 +180,48 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(getString(R.string.maps_apikey))
                 .build();
-        DirectionsApiRequest req = DirectionsApi.getDirections(context, "41.385064,2.173403", "40.416775,-3.70379");
-        try {
-            DirectionsResult res = req.await();
+        if (lastLatLng != null) {
+            //Removes ( and ) chars
+            String firstLatLngString = String.valueOf(firstLat) +"," +String.valueOf(firstLng);
+            String lastLatLngString = String.valueOf(lastLat) +"," +String.valueOf(lastLng);
 
-            //Loop through legs and steps to get encoded polylines of each step
-            if (res.routes != null && res.routes.length > 0) {
-                DirectionsRoute route = res.routes[0];
+            Log.d(TAG,"firstLatLngString lat " + firstLatLngString);
+            Log.d(TAG,"lastLatLngString lat " + lastLatLngString);
 
-                if (route.legs !=null) {
-                    for(int i=0; i<route.legs.length; i++) {
-                        DirectionsLeg leg = route.legs[i];
-                        if (leg.steps != null) {
-                            for (int j=0; j<leg.steps.length;j++){
-                                DirectionsStep step = leg.steps[j];
-                                if (step.steps != null && step.steps.length >0) {
-                                    for (int k=0; k<step.steps.length;k++){
-                                        DirectionsStep step1 = step.steps[k];
-                                        EncodedPolyline points1 = step1.polyline;
-                                        if (points1 != null) {
-                                            //Decode polyline and add points to list of route coordinates
-                                            List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
-                                            for (com.google.maps.model.LatLng coord1 : coords1) {
-                                                path.add(new LatLng(coord1.lat, coord1.lng));
+            DirectionsApiRequest req = DirectionsApi.getDirections(context, firstLatLngString, lastLatLngString);
+            try {
+                DirectionsResult res = req.await();
+
+                //Loop through legs and steps to get encoded polylines of each step
+                if (res.routes != null && res.routes.length > 0) {
+                    DirectionsRoute route = res.routes[0];
+
+                    if (route.legs != null) {
+                        for (int i = 0; i < route.legs.length; i++) {
+                            DirectionsLeg leg = route.legs[i];
+                            if (leg.steps != null) {
+                                for (int j = 0; j < leg.steps.length; j++) {
+                                    DirectionsStep step = leg.steps[j];
+                                    if (step.steps != null && step.steps.length > 0) {
+                                        for (int k = 0; k < step.steps.length; k++) {
+                                            DirectionsStep step1 = step.steps[k];
+                                            EncodedPolyline points1 = step1.polyline;
+                                            if (points1 != null) {
+                                                //Decode polyline and add points to list of route coordinates
+                                                List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
+                                                for (com.google.maps.model.LatLng coord1 : coords1) {
+                                                    path.add(new LatLng(coord1.lat, coord1.lng));
+                                                }
                                             }
                                         }
-                                    }
-                                } else {
-                                    EncodedPolyline points = step.polyline;
-                                    if (points != null) {
-                                        //Decode polyline and add points to list of route coordinates
-                                        List<com.google.maps.model.LatLng> coords = points.decodePath();
-                                        for (com.google.maps.model.LatLng coord : coords) {
-                                            path.add(new LatLng(coord.lat, coord.lng));
+                                    } else {
+                                        EncodedPolyline points = step.polyline;
+                                        if (points != null) {
+                                            //Decode polyline and add points to list of route coordinates
+                                            List<com.google.maps.model.LatLng> coords = points.decodePath();
+                                            for (com.google.maps.model.LatLng coord : coords) {
+                                                path.add(new LatLng(coord.lat, coord.lng));
+                                            }
                                         }
                                     }
                                 }
@@ -211,20 +229,19 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
                         }
                     }
                 }
+            } catch (Exception ex) {
+                Log.e(TAG, ex.getLocalizedMessage());
             }
-        } catch(Exception ex) {
-            Log.e(TAG, ex.getLocalizedMessage());
+
+            //Draw the polyline
+            if (path.size() > 0) {
+                PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
+                googleMap.addPolyline(opts);
+            }
+
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLatLng, 15.0f));
         }
-
-        //Draw the polyline
-        if (path.size() > 0) {
-            PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
-            googleMap.addPolyline(opts);
-        }
-
-        googleMap.getUiSettings().setZoomControlsEnabled(true);
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(zaragoza, 6));
     }
-
 }

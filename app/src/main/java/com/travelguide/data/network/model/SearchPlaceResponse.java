@@ -10,6 +10,10 @@ import java.util.List;
 
 public class SearchPlaceResponse implements Parcelable {
 
+    @SerializedName("status")
+    @Expose
+    private String status;
+
     @SerializedName("html_attributions")
     @Expose
     private List<String> htmlAttributions;
@@ -41,6 +45,14 @@ public class SearchPlaceResponse implements Parcelable {
 
     public void setHtmlAttributions(List<String> htmlAttributions) {
         this.htmlAttributions = htmlAttributions;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<PlaceResult> getPlaceResult() {

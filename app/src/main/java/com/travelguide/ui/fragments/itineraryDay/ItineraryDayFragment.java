@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.travelguide.R;
+import com.travelguide.data.network.model.Attraction;
 import com.travelguide.data.network.model.Day;
+import com.travelguide.ui.SimpleDividerItemDecoration;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.dayRoute.DayRouteFragment;
+import com.travelguide.ui.main.MainActivity;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
@@ -89,10 +93,14 @@ public class ItineraryDayFragment extends BaseFragment implements ItineraryDayMv
 
         mPresenter.onAttach(this);
 
+        ((MainActivity)getActivity()).showFAB(ItineraryDayFragment.TAG);
+        ((MainActivity)getActivity()).hideWidget();
+
         layoutManager = new GridLayoutManager(getContext(),1);
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
         mAdapter = new ItineraryDayAdapter(this);
 
@@ -116,18 +124,22 @@ public class ItineraryDayFragment extends BaseFragment implements ItineraryDayMv
     }
 
     @Override
-    public void onClick(String attraction) {
-
+    public void onClick(Attraction attraction) {
+        //Todo adicionar codigo para a tela de detalhe
     }
 
     public void showMap() {
-        openDayRouteFragment(day.getAttractions());
+        if(day.getAttractions().size() == 0 ){
+            Toast.makeText(getContext(), "There's nothing to show", Toast.LENGTH_SHORT).show();
+        }else{
+            openDayRouteFragment(day.getAttractions());
+        }
     }
 
-    private void openDayRouteFragment(List<String> attractions) {
+    private void openDayRouteFragment(List<Attraction> attractions) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.content_main, DayRouteFragment.getInstance((ArrayList<String>) attractions), DayRouteFragment.TAG)
+                .replace(R.id.content_main, DayRouteFragment.getInstance((ArrayList<Attraction>) attractions), DayRouteFragment.TAG)
                 .commit();
     }
 

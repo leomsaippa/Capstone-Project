@@ -24,6 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.travelguide.utils.AppConstants.PARAM_EMAIL;
+import static com.travelguide.utils.AppConstants.PARAM_NAME;
+
 public class LoginActivity extends BaseActivity implements LoginMvpView {
 
 
@@ -105,8 +108,12 @@ public class LoginActivity extends BaseActivity implements LoginMvpView {
     }
 
     private void updateUI(GoogleSignInAccount account) {
-        Toast.makeText(this, "User is signed in", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+        if(account != null){
+            Toast.makeText(this, "User is signed in ", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra(PARAM_NAME,account.getDisplayName());
+            intent.putExtra(PARAM_EMAIL,account.getEmail());
+            startActivity(intent);
+        }
     }
 }
