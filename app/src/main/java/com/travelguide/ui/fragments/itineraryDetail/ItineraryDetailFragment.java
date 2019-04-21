@@ -94,7 +94,10 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
 
         setUnBinder(ButterKnife.bind(this, view));
 
-        ((MainActivity)getActivity()).showWidget();
+        MainActivity activity = ((MainActivity) getActivity());
+
+        if(activity!=null)
+            ((MainActivity)getActivity()).showWidget();
 
 
         mPresenter.onAttach(this);
@@ -103,7 +106,9 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+
+        if(getContext() != null)
+            mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
         mAdapter = new ItineraryDetailAdapter(this);
 
@@ -129,17 +134,25 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
     @Override
     public void onClick(Day day) {
         if(day!=null){
-            openItineraryDayFragment(day);
+            if(day.getAttractions() == null){
+                Toast.makeText(getContext(), "There's no attraction on this day!", Toast.LENGTH_SHORT).show();
+            }else{
+                openItineraryDayFragment(day);
+            }
         }else{
             Toast.makeText(getContext(), "There's no attraction on this day!", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void openItineraryDayFragment(Day day) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_main, ItineraryDayFragment.getInstance(day), ItineraryDayFragment.TAG)
-                .commit();
+        if(getActivity()!=null){
+            if(getActivity().getSupportFragmentManager() != null){
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_main, ItineraryDayFragment.getInstance(day), ItineraryDayFragment.TAG)
+                        .commit();
+            }
+        }
     }
 
     public void addWidget() {

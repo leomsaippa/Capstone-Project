@@ -46,6 +46,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -118,7 +119,10 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         mPresenter.onAttach(this);
 
 
-        ((MainActivity) getActivity()).showFAB(AttractionDetailFragment.TAG);
+        MainActivity activity = ((MainActivity) getActivity());
+
+        if(activity !=null)
+            activity.showFAB(AttractionDetailFragment.TAG);
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8) {
@@ -143,7 +147,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
                                               HttpContext context) throws org.apache.http.ProtocolException {
 
                         //Capture the Location header here - This is your redirected URL
-                        System.out.println(Arrays.toString(response.getHeaders("Location")));
+                        System.out.println(Arrays.toString(response.getHeaders(getString(R.string.location))));
 
                         return super.getLocationURI(response, context);
 
@@ -157,41 +161,43 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (response.getStatusLine().getStatusCode() == 200) {
-                    // Todo: use the Image response
-                    HttpEntity entity = response.getEntity();
-                    if (entity != null) {
-                        InputStream instream = null;
-                        try {
-                            instream = entity.getContent();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Bitmap bmp = BitmapFactory.decodeStream(instream);
+                if (response != null) {
+                    if (response.getStatusLine().getStatusCode() == 200) {
+                        // Todo: use the Image response
+                        HttpEntity entity = response.getEntity();
+                        if (entity != null) {
+                            InputStream instream = null;
+                            try {
+                                instream = entity.getContent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            Bitmap bmp = BitmapFactory.decodeStream(instream);
 
-                        mIvAttractionDetail.setImageBitmap(bmp);
+                            mIvAttractionDetail.setImageBitmap(bmp);
 
-                        try {
-                            instream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                            try {
+                                Objects.requireNonNull(instream).close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+                    } else {
+                        System.out.println(response.getStatusLine().getStatusCode() + "");
                     }
-                } else {
-                    System.out.println(response.getStatusLine().getStatusCode() + "");
                 }
+            } else {
+                mIvAttractionDetail.setBackground(getResources().getDrawable(R.drawable.noimage));
             }
-        }else{
-            mIvAttractionDetail.setBackground(getResources().getDrawable(R.drawable.noimage));
         }
 
         JodaTimeAndroid.init(getContext());
 
 
         mAttraction.setText(searchPlaceResult.name);
-        String rating = "Rating " + String.valueOf(searchPlaceResult.rating);
+        String rating = getString(R.string.rating) + String.valueOf(searchPlaceResult.rating);
         mRating.setText(rating);
-        String totalUsers = "Total rating people: " + String.valueOf(searchPlaceResult.userRatingsTotal);
+        String totalUsers = getString(R.string.total_rating_people) + String.valueOf(searchPlaceResult.userRatingsTotal);
         mTotalUser.setText(totalUsers);
         boolean isOpenNow = false;
         if(searchPlaceResult.openingHours != null){
@@ -236,7 +242,7 @@ public class AttractionDetailFragment extends BaseFragment implements Attraction
         LocalDate dayBegin = itinerary.getDayBegin();
         int quantityDays = Days.daysBetween(dayBegin, date).getDays();
 
-        if(quantityDays < 1 || quantityDays > itinerary.getNumber_days()){
+        if(quantityDays < 0 || quantityDays >= itinerary.getNumber_days()){
             onSelectedDateError();
         }else {
 

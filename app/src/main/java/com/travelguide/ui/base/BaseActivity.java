@@ -1,19 +1,19 @@
 package com.travelguide.ui.base;
 
-import android.app.DatePickerDialog;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.DatePicker;
 
 import com.travelguide.di.component.ActivityComponent;
 import com.travelguide.di.component.DaggerActivityComponent;
 import com.travelguide.di.module.ActivityModule;
 import com.travelguide.utils.CommonUtils;
 
+@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity implements MvpView {
 
     private ProgressDialog mProgressDialog;

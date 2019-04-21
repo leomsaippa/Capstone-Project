@@ -57,6 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/star_for_rating"
                     android:background="@android:drawable/star_big_on" />
 
             </LinearLayout>
@@ -74,7 +75,6 @@
 
 
             <TextView
-                android:id="@+id/photos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -84,6 +84,7 @@
 
             <ImageView
                 android:id="@+id/iv_attraction_detail"
+                android:contentDescription="@string/attraction_detail_image"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="5dp"

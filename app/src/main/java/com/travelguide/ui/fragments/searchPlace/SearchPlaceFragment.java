@@ -141,11 +141,6 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void onErrorEmptyPlace() {
         mPlaceName.setError(getString(R.string.error_empty_place));
     }
@@ -181,9 +176,7 @@ public class SearchPlaceFragment extends BaseFragment implements SearchPlaceMvpV
 
     @Override
     public void showInternetError() {
-        DialogInterface.OnClickListener positiveDialog = (dialog, which) -> {
-            onClickBtnSearch(getView());
-        };
+        DialogInterface.OnClickListener positiveDialog = (dialog, which) -> onClickBtnSearch(getView());
 
         showAlertMessage(getString(R.string.something_wrong),
                 getString(R.string.try_again),

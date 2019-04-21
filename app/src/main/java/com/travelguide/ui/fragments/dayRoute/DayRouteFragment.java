@@ -35,6 +35,7 @@ import com.travelguide.ui.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -85,41 +86,31 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
 
         mPresenter.onAttach(this);
 
-        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView = view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
 
         try {
-            MapsInitializer.initialize(getActivity().getApplicationContext());
+            MapsInitializer.initialize(Objects.requireNonNull(getActivity()).getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                Log.d(TAG,"onMapReady");
-                googleMap = mMap;
+        mMapView.getMapAsync(mMap -> {
+            Log.d(TAG,"onMapReady");
+            googleMap = mMap;
 
 
-                drawRoute(attractions);
-                // For showing a move to my location button
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    Log.d(TAG,"Missing permissions");
-                return;
-                }else{
-                    googleMap.setMyLocationEnabled(true);
+            drawRoute(attractions);
+            // For showing a move to my location button
+            if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG,"Missing permissions");
+            }else{
+                googleMap.setMyLocationEnabled(true);
 
-                }
-                // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
+
         });
 
 
@@ -173,7 +164,7 @@ public class DayRouteFragment extends BaseFragment implements DayRouteMvpView {
         }
 
         //Define list to get all latlng for the route
-        List<LatLng> path = new ArrayList();
+        @SuppressWarnings("unchecked") List<LatLng> path = new ArrayList();
 
 
         //Execute Directions API request

@@ -1,6 +1,5 @@
 package com.travelguide.ui.fragments.attractionList;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +28,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class  AttractionListFragment extends BaseFragment implements AttractionListMvpView, AttractionsAdapter.AttractionsAdapterOnClickHandler{
+public class  AttractionListFragment extends BaseFragment implements AttractionListMvpView, AttractionsAdapter.AttractionsAdapterOnClickHandler {
 
     public static final String TAG = AttractionListFragment.class.getSimpleName();
     private static final String PARAM_SEARCH_RESPONSE = "SEARCH_RESPONSE_LIST";
@@ -96,26 +95,24 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
 
         mPresenter.onAttach(this);
 
-        ((MainActivity)getActivity()).showFAB(AttractionListFragment.TAG);
+        MainActivity mainActivity = ((MainActivity) getActivity());
+        if (mainActivity != null)
+            mainActivity.showFAB(AttractionListFragment.TAG);
 
+        layoutManager = new GridLayoutManager(getContext(), 1);
 
-        layoutManager = new GridLayoutManager(getContext(),1);
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
+        if (getContext() != null)
+            mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
         mAdapter = new AttractionsAdapter(this);
         setPlaceResponseList();
         setItinerary();
         mRecyclerView.setAdapter(mAdapter);
 
-        mButtonTryAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadAttractions(currentPage);
-            }
-        });
+        mButtonTryAgain.setOnClickListener(view1 -> loadAttractions(currentPage));
 
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
@@ -153,33 +150,19 @@ public class  AttractionListFragment extends BaseFragment implements AttractionL
         openAttractionDetailFragment(searchPlaceResult, itinerary);
     }
 
-    private void showError(){
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mError.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mButtonTryAgain.setVisibility(View.VISIBLE);
-    }
-
-    private void showLoading(){
-        mRecyclerView.setVisibility(View.INVISIBLE);
-        mError.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mButtonTryAgain.setVisibility(View.INVISIBLE);
-    }
-
-    private void showList(){
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mError.setVisibility(View.INVISIBLE);
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mButtonTryAgain.setVisibility(View.INVISIBLE);
-    }
-
     @Override
     public void openAttractionDetailFragment(PlaceResult searchPlaceResult, Itinerary itinerary) {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_main, AttractionDetailFragment.getInstance(searchPlaceResult, itinerary), AttractionDetailFragment.TAG)
-                .addToBackStack(AttractionDetailFragment.TAG)
-                .commit();
+        if (getActivity() != null) {
+            if (getActivity().getSupportFragmentManager() != null) {
+
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.content_main, AttractionDetailFragment.getInstance(searchPlaceResult, itinerary), AttractionDetailFragment.TAG)
+                        .addToBackStack(AttractionDetailFragment.TAG)
+                        .commit();
+            }
+        } else {
+            Log.e(TAG, "Error replacing");
+        }
     }
 }

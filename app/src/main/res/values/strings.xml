@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Travel Guide</string>
-    <string name="title_activity_main">Main</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -10,14 +9,12 @@
     <string name="search">Search</string>
     <string name="endTravel">End date from the trip</string>
     <string name="beginningTravel">Beginning date from the trip</string>
-    <string name="searchPlace">Search for point of interest place</string>
     <string name="error_login">Failed to login</string>
     <string name="internet_error">Cannot connect to Internet. Please check your connection!</string>
     <string name="try_again">Try again</string>
     <string name="poster_description">Poster attraction image.</string>
     <string name="loading">Loading</string>
     <string name="error_empty_place">Place cannot be blank!</string>
-    <string name="see_coments">See coments</string>
     <string name="error_empty_begin_travel">Begin travel day cannot be blank!</string>
     <string name="error_empty_end_travel">End travel day cannot be blank!</string>
     <string name="error_invalid_date">End date is actually before begin date</string>
@@ -33,5 +30,12 @@
     <string name="search_new_place">Search new place</string>
     <string name="something_wrong">Something went wrong. Please try again</string>
     <string name="zero_results">No places were found. Please try another city</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
+    <string name="star_for_rating">Star for rating</string>
+    <string name="attraction_detail_image">Attraction detail image</string>
+    <string name="calendar_for_choose_date">Calendar for choose date</string>
+    <string name="logo">logo</string>
+    <string name="rating">Rating</string>
+    <string name="total_rating_people">Total rating people:</string>
+    <string name="location">Location</string>
 </resources>

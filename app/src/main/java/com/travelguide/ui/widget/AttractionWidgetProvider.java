@@ -9,11 +9,8 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.travelguide.R;
-import com.travelguide.data.network.model.Day;
 import com.travelguide.data.sharedPreferences.AppSharedPref;
 import com.travelguide.ui.main.MainActivity;
-
-import java.util.List;
 
 public class AttractionWidgetProvider extends AppWidgetProvider {
 

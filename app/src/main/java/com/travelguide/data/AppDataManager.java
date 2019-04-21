@@ -36,11 +36,6 @@ public class AppDataManager implements DataManager{
 
 
     @Override
-    public void openMainActivity() {
-
-    }
-
-    @Override
     public String generateTextPlaceQuery(String place) {
         return mStringHelper.generateTextPlaceQuery(place);
     }

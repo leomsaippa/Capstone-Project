@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="@string/try_again"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/rv_itinerary_list"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_itinerary_detail_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

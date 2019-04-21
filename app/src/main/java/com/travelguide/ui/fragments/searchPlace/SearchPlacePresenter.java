@@ -65,10 +65,10 @@ public class SearchPlacePresenter <V extends SearchPlaceMvpView> extends BasePre
 
         int quantityDays = Days.daysBetween(dateBeginTravel,dateEndTravel).getDays();
 
-        if (dateBeginTravel == null || dateBeginTravel.toString().isEmpty()){
+        if (dateBeginTravel.toString().isEmpty()){
             getMvpView().onErrorEmptyBeginTravel();
         }else {
-            if (dateEndTravel == null || dateEndTravel.toString().isEmpty()) {
+            if (dateEndTravel.toString().isEmpty()) {
                 getMvpView().onErrorEmptyEndTravel();
             } else {
                 if (quantityDays<=0) {

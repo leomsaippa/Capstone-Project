@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 
 import com.travelguide.R;
 import com.travelguide.data.network.model.Day;
-import com.travelguide.ui.base.BaseActivity;
 
 
 import java.util.ArrayList;

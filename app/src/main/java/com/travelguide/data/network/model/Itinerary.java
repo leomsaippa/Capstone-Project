@@ -13,7 +13,6 @@ import com.google.gson.annotations.SerializedName;
 import com.travelguide.data.db.DateConverter;
 import com.travelguide.data.db.LocalDateConverter;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import java.util.List;

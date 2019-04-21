@@ -7,7 +7,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.Itinerary;
 
 import java.util.List;

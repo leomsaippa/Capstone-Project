@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.ItineraryAdapterViewHolder> {
 
@@ -100,14 +101,10 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             }
         }
         //todo get days
-        try {
-            itineraryAdapterViewHolder.bind(itineraryList.get(position).getName(),
-                    itineraryList.get(position).getDayBegin().toString() + " a " +itineraryList.get(position).getDayEnd(),
-                    String.valueOf(itineraryList.get(position).getNumber_days()),
-                    String.valueOf(numberAttractions));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        itineraryAdapterViewHolder.bind(itineraryList.get(position).getName(),
+                itineraryList.get(position).getDayBegin().toString() + " a " +itineraryList.get(position).getDayEnd(),
+                String.valueOf(itineraryList.get(position).getNumber_days()),
+                String.valueOf(numberAttractions));
 
     }
 
@@ -160,22 +157,17 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
         }
 
         void bind(String name, String date, String days,
-                  String quantity) throws IOException {
+                  String quantity) {
 
 
-            String daysTotal = days + " dias";
-            String attractionsTotal = quantity + " atrações selecionadas";
+            String daysTotal = days + " days";
+            String attractionsTotal = quantity + " attractions selected";
             mTvName.setText(name);
             mTvDate.setText(date);
             mTvDays.setText(daysTotal);
             mTvAttractions.setText(attractionsTotal);
 
-            mBtnSeeDetails.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mClickHandler.onCLick(itineraryList.get((getAdapterPosition())));
-                }
-            });
+            mBtnSeeDetails.setOnClickListener(v -> mClickHandler.onCLick(itineraryList.get((getAdapterPosition()))));
 
 
             String photoReference = itineraryList.get(getAdapterPosition()).photo_reference;
@@ -183,56 +175,50 @@ public class ItineraryAdapter extends RecyclerView.Adapter<ItineraryAdapter.Itin
             //TODO UTILIZAR O APIHELPER
             String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + photoReference + "&sensor=false&key="+mContext.getString(R.string.maps_apikey);
 
-            if (url != null) {
+            DefaultHttpClient hc = new DefaultHttpClient();
+            HttpGet httpget = new HttpGet(url);
+            HttpContext context = new BasicHttpContext();
+            hc.setRedirectHandler(new DefaultRedirectHandler() {
+                @Override
+                public URI getLocationURI(HttpResponse response,
+                                          HttpContext context) throws org.apache.http.ProtocolException {
 
-                DefaultHttpClient hc = new DefaultHttpClient();
-                HttpGet httpget = new HttpGet(url);
-                HttpContext context = new BasicHttpContext();
-                hc.setRedirectHandler(new DefaultRedirectHandler() {
-                    @Override
-                    public URI getLocationURI(HttpResponse response,
-                                              HttpContext context) throws org.apache.http.ProtocolException {
+                    //Capture the Location header here - This is your redirected URL
+                    System.out.println(Arrays.toString(response.getHeaders("Location")));
 
-                        //Capture the Location header here - This is your redirected URL
-                        System.out.println(Arrays.toString(response.getHeaders("Location")));
+                    return super.getLocationURI(response, context);
 
-                        return super.getLocationURI(response, context);
+                }
+            });
 
-                    }
-                });
-
-                // Response contains the image you want. If you test the redirect URL in a browser or REST CLIENT you can see it's data
-                HttpResponse response = null;
+            // Response contains the image you want. If you test the redirect URL in a browser or REST CLIENT you can see it's data
+            HttpResponse response = null;
+            try {
+                response = hc.execute(httpget, context);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Objects.requireNonNull(response).getStatusLine().getStatusCode();
+            // Todo: use the Image response
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                InputStream instream = null;
                 try {
-                    response = hc.execute(httpget, context);
+                    instream = entity.getContent();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (response.getStatusLine().getStatusCode() == 200) {
-                    // Todo: use the Image response
-                    HttpEntity entity = response.getEntity();
-                    if (entity != null) {
-                        InputStream instream = null;
-                        try {
-                            instream = entity.getContent();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Bitmap bmp = BitmapFactory.decodeStream(instream);
-                        mIvAttraction.setImageBitmap(bmp);
+                Bitmap bmp = BitmapFactory.decodeStream(instream);
+                mIvAttraction.setImageBitmap(bmp);
 
-                        try {
-                            instream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } else {
-                    System.out.println(response.getStatusLine().getStatusCode() + "");
+                try {
+                    instream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-
         }
+
     }
 }
 
