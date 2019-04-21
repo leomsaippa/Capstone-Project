@@ -16,7 +16,7 @@ public class PlaceResult implements Parcelable {
 
     @SerializedName("geometry")
     @Expose
-    public com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.Geometry geometry;
+    public Geometry geometry;
     @SerializedName("icon")
     @Expose
     public String icon;
@@ -92,11 +92,11 @@ public class PlaceResult implements Parcelable {
         this.formattedAddress = formattedAddress;
     }
 
-    public com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.Geometry getGeometry() {
+    public Geometry getGeometry() {
         return geometry;
     }
 
-    public void setGeometry(com.google.android.libraries.places.api.internal.impl.net.pablo.PlaceResult.Geometry geometry) {
+    public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
     }
 
