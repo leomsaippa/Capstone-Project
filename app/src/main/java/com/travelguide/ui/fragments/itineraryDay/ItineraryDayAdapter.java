@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.travelguide.R;
+import com.travelguide.data.network.model.Attraction;
 
 import java.util.List;
 
@@ -18,9 +19,9 @@ public class ItineraryDayAdapter extends RecyclerView.Adapter<ItineraryDayAdapte
 
     private final ItineraryDayAdapterOnClickHandler mClickHandler;
 
-    private List<String> attractionsList;
+    private List<Attraction> attractionsList;
 
-    public void setAttractions(List<String> attractions) {
+    public void setAttractions(List<Attraction> attractions) {
         if(attractionsList != null){
             this.attractionsList.addAll(attractions);
         }else{
@@ -40,7 +41,7 @@ public class ItineraryDayAdapter extends RecyclerView.Adapter<ItineraryDayAdapte
 
 
     public interface ItineraryDayAdapterOnClickHandler {
-        void onClick (String attraction);
+        void onClick (Attraction attraction);
     }
 
     public ItineraryDayAdapter(ItineraryDayAdapterOnClickHandler mClickHandler) {
@@ -71,29 +72,21 @@ public class ItineraryDayAdapter extends RecyclerView.Adapter<ItineraryDayAdapte
     public class ItineraryDayAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final TextView mTvAttraction;
-        final TextView mTvHour;
-        final ImageView mIvattraction;
 
         public ItineraryDayAdapterViewHolder(View itemView) {
             super(itemView);
             mTvAttraction = itemView.findViewById(R.id.tv_attraction_day);
-            mTvHour = itemView.findViewById(R.id.tv_attraction_hour);
-            mIvattraction = itemView.findViewById(R.id.iv_attraction_day);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             Log.d(TAG,"onClick " + getAdapterPosition());
-//            mClickHandler.onClick(dayList.get((getAdapterPosition())).toString());
+            mClickHandler.onClick(attractionsList.get((getAdapterPosition())));
         }
 
-        public void bind(String attraction) {
-
-            //todo adicionar hour and image
-            mTvAttraction.setText(attraction);
-            mTvHour.setText("09-11");
-//            Picasso.get().load("").into(mIvattraction);
+        public void bind(Attraction attraction) {
+            mTvAttraction.setText(attraction.getName());
         }
     }
 }

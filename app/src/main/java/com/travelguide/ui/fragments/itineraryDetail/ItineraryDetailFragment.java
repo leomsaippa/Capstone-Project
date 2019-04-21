@@ -6,8 +6,10 @@ import com.travelguide.R;
 import com.travelguide.data.network.model.Day;
 import com.travelguide.data.network.model.Itinerary;
 import com.travelguide.data.sharedPreferences.AppSharedPref;
+import com.travelguide.ui.SimpleDividerItemDecoration;
 import com.travelguide.ui.base.BaseFragment;
 import com.travelguide.ui.fragments.itineraryDay.ItineraryDayFragment;
+import com.travelguide.ui.main.MainActivity;
 import com.travelguide.ui.widget.AttractionWidgetProvider;
 import com.travelguide.utils.EndlessRecyclerViewScrollListener;
 import android.support.annotation.NonNull;
@@ -92,12 +94,16 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
 
         setUnBinder(ButterKnife.bind(this, view));
 
+        ((MainActivity)getActivity()).showWidget();
+
+
         mPresenter.onAttach(this);
 
         layoutManager = new GridLayoutManager(getContext(),1);
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(getContext()));
 
         mAdapter = new ItineraryDetailAdapter(this);
 
@@ -122,8 +128,11 @@ public class ItineraryDetailFragment extends BaseFragment implements ItineraryDe
 
     @Override
     public void onClick(Day day) {
-        Toast.makeText(getContext(), "Day " + day.getAttractions().toString(), Toast.LENGTH_SHORT).show();
-        openItineraryDayFragment(day);
+        if(day!=null){
+            openItineraryDayFragment(day);
+        }else{
+            Toast.makeText(getContext(), "There's no attraction on this day!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openItineraryDayFragment(Day day) {
